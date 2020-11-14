@@ -21,15 +21,15 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { RestError } from "../../../../interfaces/RestError";
-import { inventoryBrand } from "../../Sidebar/RoutesAdmin";
-import { getBrandById, saveUpdateBrand } from "../../../../services/brandService";
+import { inventoryProduct } from "../../Sidebar/RoutesAdmin";
+import { getProductById, saveUpdateProduct } from "../../../../services/productService";
 import Input from "../../../../components/Input";
 
 interface RouteParams {
     id: string
 }
 
-const CreateEditBrand: React.FC = () => {
+const CreateEditProduct: React.FC = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const [loading, setLoading] = useState<boolean>(false);
@@ -37,35 +37,53 @@ const CreateEditBrand: React.FC = () => {
 
 	const validationSchema = Yup.object().shape({
 		name: Yup.string()
-			.min(3, "nome da marca deve ter no minímo 3 caracteres")
-			.max(50, "nome da marca deve ter no máximo 50 caracteres")
+			.min(5, "nome do produto deve ter no minímo 5 caracteres")
+			.max(255, "nome do produto deve ter no máximo 255 caracteres")
 			.nullable(false)
-            .required("nome da marca é obrigatório")
+            .required("nome do produto é obrigatório"),
+        model: Yup.string()
+			.min(5, "modelo deve ter no minímo 5 caracteres")
+			.max(255, "modelo deve ter no máximo 255 caracteres")
+			.nullable(false)
+            .required("modelo é obrigatório"),
+        serial: Yup.string()
+			.min(5, "serial deve ter no minímo 5 caracteres")
+			.max(255, "serial deve ter no máximo 255 caracteres")
+			.nullable(false)
+            .required("serial é obrigatório")
 	});
 
-	const initialBrand = {
+	const initialProduct = {
 		id: "",
-		name: ""
+		brand: {
+			id: ""
+		},
+		measurementUnit: {
+			id: ""
+		},
+        name: "",
+		model: "",
+		serial: ""
 	};
 
-	const [currentBrand, setCurrentBrand] = useState(initialBrand);
+	const [currentProduct, setCurrentProduct] = useState(initialProduct);
 
-	const getBrand = async (id: number) => {
+	const getProduct = async (id: number) => {
 		setLoading(true);
-		const data = await getBrandById(id);
+		const data = await getProductById(id);
 		setLoading(false);
 		if (data) {
-			setCurrentBrand(data);
+			setCurrentProduct(data);
 		}
 	}
 
 	useEffect(() => {
 		if (id) {
-			getBrand(parseInt(id));
+			getProduct(parseInt(id));
 		}
 	}, [id]);
 
-	const renderTitle = id ? "Atualizar Marca" : "Cadastrar Marca";
+	const renderTitle = id ? "Atualizar Produto" : "Cadastrar Produto";
 	const renderButtonText = id ? "Atualizar" : "Salvar";
 
 	return (
@@ -98,7 +116,7 @@ const CreateEditBrand: React.FC = () => {
 
 							<Formik
 								enableReinitialize={true}
-								initialValues={currentBrand}
+								initialValues={currentProduct}
 								validationSchema={validationSchema}
 								onSubmit={async (values, { setSubmitting, setFieldError }) => {
 									try {
@@ -107,11 +125,11 @@ const CreateEditBrand: React.FC = () => {
 											...values
 										};
 
-										const data = await saveUpdateBrand(object, values.id ? "put" : "post");
+										const data = await saveUpdateProduct(object, values.id ? "put" : "post");
 										setSubmitting(false);
 										if (data) {
-											history.push(inventoryBrand);
-											toast.success("Marca salva com sucesso!");
+											history.push(inventoryProduct);
+											toast.success("Produto salvo com sucesso!");
 										}
 									} catch (error) {
 										setSubmitting(false);
@@ -149,7 +167,7 @@ const CreateEditBrand: React.FC = () => {
 														required
 														fullWidth
 														id="name"
-														label="Marca"
+														label="Nome do produto"
 														onChange={handleChange}
 														onBlur={handleBlur}
 														value={values?.name}
@@ -157,6 +175,43 @@ const CreateEditBrand: React.FC = () => {
 														error={errors.name && touched.name}
 													/>
 												</Grid>
+
+												<Grid item xs={12}>
+													<Field
+														component={Input}
+														autoComplete="model"
+														name="model"
+														variant="outlined"
+														required
+														fullWidth
+														id="model"
+														label="Modelo"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values?.model}
+														helperText={errors.model && touched.model ? errors.model : ""}
+														error={errors.model && touched.model}
+													/>
+												</Grid>
+
+												<Grid item xs={12}>
+													<Field
+														component={Input}
+														autoComplete="serial"
+														name="serial"
+														variant="outlined"
+														required
+														fullWidth
+														id="serial"
+														label="Serial"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values?.serial}
+														helperText={errors.serial && touched.serial ? errors.serial : ""}
+														error={errors.serial && touched.serial}
+													/>
+												</Grid>
+
 												
 											</Grid>
 
@@ -187,4 +242,4 @@ const CreateEditBrand: React.FC = () => {
 	);
 }
 
-export default memo(CreateEditBrand);
+export default memo(CreateEditProduct);

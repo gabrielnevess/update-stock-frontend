@@ -17,6 +17,7 @@ import ViewMeasurementUnit from "../MeasurementUnit";
 import CreateEditMeasurementUnit from "../MeasurementUnit/CreateEditMeasurementUnit";
 
 import ViewProduct from "../Product";
+import CreateEditProduct from "../Product/CreateEditProduct";
 
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
@@ -135,6 +136,16 @@ export const routesAdmin: IRoutes[] = [
         path: inventoryProduct,
         exact: true,
         component: () => <ViewProduct title="Produtos" />
+    },
+    {
+        path: inventoryProductCe,
+        exact: true,
+        component: () => <CreateEditProduct />
+    },
+    {
+        path: `${inventoryProductCe}/:id`,
+        exact: true,
+        component: () => <CreateEditProduct />
     },
     {
         path: "*",

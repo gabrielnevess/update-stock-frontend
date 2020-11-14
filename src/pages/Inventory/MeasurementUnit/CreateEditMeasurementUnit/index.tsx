@@ -37,12 +37,12 @@ const CreateEditMeasurementUnit: React.FC = () => {
 
 	const validationSchema = Yup.object().shape({
 		name: Yup.string()
-			.min(3, "unidade deve ter no minímo 5 caracteres")
-			.max(50, "unidade deve ter no máximo 50 caracteres")
+			.min(3, "nome da unidade de medida deve ter no minímo 3 caracteres")
+			.max(50, "nome da unidade de medida deve ter no máximo 50 caracteres")
 			.nullable(false)
-            .required("unidade é obrigatório"),
+            .required("nome da unidade de medida é obrigatório"),
         prefix: Yup.string()
-			.min(3, "prefixo deve ter no minímo 5 caracteres")
+			.min(3, "prefixo deve ter no minímo 3 caracteres")
 			.max(50, "prefixo deve ter no máximo 50 caracteres")
 			.nullable(false)
             .required("prefixo é obrigatório")
@@ -155,7 +155,7 @@ const CreateEditMeasurementUnit: React.FC = () => {
 														required
 														fullWidth
 														id="name"
-														label="Unidade"
+														label="Nome da unidade de medida"
 														onChange={handleChange}
 														onBlur={handleBlur}
 														value={values?.name}
