@@ -91,7 +91,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 					</div> :
 					<React.Fragment>
 						<TableContainer component={Paper}>
-							<Table size="small" aria-label="minhas montagens">
+							<Table aria-label="minhas marcas">
 								<TableHead>
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
@@ -102,7 +102,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{(pageable?.content?.length !== 0) ?
+									{(pageable?.content && pageable.content?.length !== 0) ?
 										pageable?.content?.map((row, index) => (
 											<TableRow key={index}>
 												<TableCell align="left">{row.id}</TableCell>
@@ -123,7 +123,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 											</TableRow>
 										)) :
 										<TableRow>
-											<TableCell align="center" colSpan={7}>
+											<TableCell align="center" colSpan={5}>
 												<Typography variant="subtitle1">Nenhum Registro encontrado!</Typography>
 											</TableCell>
 										</TableRow>
@@ -143,7 +143,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 						</TableContainer>
 						<Tooltip title="Adicionar Marca">
 							<Fab
-								name="adicionar-marcar"
+								name="adicionar-marca"
 								color="secondary"
 								aria-label="add"
 								className={classes.fab}

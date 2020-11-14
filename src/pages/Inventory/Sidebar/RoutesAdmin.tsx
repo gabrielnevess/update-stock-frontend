@@ -9,10 +9,14 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
+
 import ViewBrand from "../Brand";
 import CreateEditBrand from "../Brand/CreateEditBrand";
+
 import ViewMeasurementUnit from "../MeasurementUnit";
 import CreateEditMeasurementUnit from "../MeasurementUnit/CreateEditMeasurementUnit";
+
+import ViewProduct from "../Product";
 
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
@@ -26,6 +30,7 @@ export const inventoryBrand: string = "/inventario/marcas";
 export const inventoryBrandCe: string = "/inventario/ce-marcas";
 //produtos
 export const inventoryProduct: string = "/inventario/produtos";
+export const inventoryProductCe: string = "/inventario/ce-produtos";
 
 // ---------- TÍTULOS ----------
 const titleHome: string = "Início";
@@ -125,6 +130,11 @@ export const routesAdmin: IRoutes[] = [
         path: `${inventoryMeasurementUnitCe}/:id`,
         exact: true,
         component: () => <CreateEditMeasurementUnit />
+    },
+    {
+        path: inventoryProduct,
+        exact: true,
+        component: () => <ViewProduct title="Produtos" />
     },
     {
         path: "*",

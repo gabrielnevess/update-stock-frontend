@@ -20,16 +20,16 @@ import {
 	Form
 } from "formik";
 import * as Yup from "yup";
-import { RestError } from "../../../interfaces/RestError";
-import { inventoryBrand } from "../Sidebar/RoutesAdmin";
-import { getBrandById, saveUpdateBrand } from "../../../services/brandService";
-import Input from "../../../components/Input";
+import { RestError } from "../../../../interfaces/RestError";
+import { inventoryMeasurementUnit } from "../../Sidebar/RoutesAdmin";
+import { getMeasurementUnitById, saveUpdateMeasurementUnit } from "../../../../services/measurementUnitService";
+import Input from "../../../../components/Input";
 
 interface RouteParams {
     id: string
 }
 
-const CreateEditBrand: React.FC = () => {
+const CreateEditMeasurementUnit: React.FC = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const [loading, setLoading] = useState<boolean>(false);
@@ -37,35 +37,41 @@ const CreateEditBrand: React.FC = () => {
 
 	const validationSchema = Yup.object().shape({
 		name: Yup.string()
-			.min(3, "marca deve ter no minímo 5 caracteres")
-			.max(50, "marca deve ter no máximo 50 caracteres")
+			.min(3, "unidade deve ter no minímo 5 caracteres")
+			.max(50, "unidade deve ter no máximo 50 caracteres")
 			.nullable(false)
-            .required("marca é obrigatório")
+            .required("unidade é obrigatório"),
+        prefix: Yup.string()
+			.min(3, "prefixo deve ter no minímo 5 caracteres")
+			.max(50, "prefixo deve ter no máximo 50 caracteres")
+			.nullable(false)
+            .required("prefixo é obrigatório")
 	});
 
-	const initialBrand = {
+	const initialMeasurementUnit = {
 		id: "",
-		name: ""
+        name: "",
+        prefix: ""
 	};
 
-	const [currentBrand, setCurrentBrand] = useState(initialBrand);
+	const [currentMeasurementUnit, setCurrentMeasurementUnit] = useState(initialMeasurementUnit);
 
-	const getBrand = async (id: number) => {
+	const getMeasurementUnit = async (id: number) => {
 		setLoading(true);
-		const data = await getBrandById(id);
+		const data = await getMeasurementUnitById(id);
 		setLoading(false);
 		if (data) {
-			setCurrentBrand(data);
+			setCurrentMeasurementUnit(data);
 		}
 	}
 
 	useEffect(() => {
 		if (id) {
-			getBrand(parseInt(id));
+			getMeasurementUnit(parseInt(id));
 		}
 	}, [id]);
 
-	const renderTitle = id ? "Atualizar Marca" : "Cadastrar Marca";
+	const renderTitle = id ? "Atualizar Unidade" : "Cadastrar Unidade";
 	const renderButtonText = id ? "Atualizar" : "Salvar";
 
 	return (
@@ -98,7 +104,7 @@ const CreateEditBrand: React.FC = () => {
 
 							<Formik
 								enableReinitialize={true}
-								initialValues={currentBrand}
+								initialValues={currentMeasurementUnit}
 								validationSchema={validationSchema}
 								onSubmit={async (values, { setSubmitting, setFieldError }) => {
 									try {
@@ -107,11 +113,11 @@ const CreateEditBrand: React.FC = () => {
 											...values
 										};
 
-										const data = await saveUpdateBrand(object, values.id ? "put" : "post");
+										const data = await saveUpdateMeasurementUnit(object, values.id ? "put" : "post");
 										setSubmitting(false);
 										if (data) {
-											history.push(inventoryBrand);
-											toast.success("Marca salva com sucesso!");
+											history.push(inventoryMeasurementUnit);
+											toast.success("Unidade salva com sucesso!");
 										}
 									} catch (error) {
 										setSubmitting(false);
@@ -149,12 +155,30 @@ const CreateEditBrand: React.FC = () => {
 														required
 														fullWidth
 														id="name"
-														label="Marca"
+														label="Unidade"
 														onChange={handleChange}
 														onBlur={handleBlur}
 														value={values?.name}
 														helperText={errors.name && touched.name ? errors.name : ""}
 														error={errors.name && touched.name}
+													/>
+												</Grid>
+
+												<Grid item xs={12}>
+													<Field
+														component={Input}
+														autoComplete="prefix"
+														name="prefix"
+														variant="outlined"
+														required
+														fullWidth
+														id="prefix"
+														label="Prefixo"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values?.prefix}
+														helperText={errors.prefix && touched.prefix ? errors.prefix : ""}
+														error={errors.prefix && touched.prefix}
 													/>
 												</Grid>
 												
@@ -187,4 +211,4 @@ const CreateEditBrand: React.FC = () => {
 	);
 }
 
-export default memo(CreateEditBrand);
+export default memo(CreateEditMeasurementUnit);

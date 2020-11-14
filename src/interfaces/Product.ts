@@ -1,8 +1,10 @@
+import { Brand } from "./Brand";
+import { MeasurementUnit } from "./MeasurementUnit";
+
 export interface Product {
 	id: number;
-	brandId: number;
-	measurementUnitId: number;
-	stateId: number;
+	brand: Brand;
+	measurementUnit: MeasurementUnit;
 	name: string;
 	model: string;
 	serial: string;

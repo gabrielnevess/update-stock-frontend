@@ -17,24 +17,24 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { getMeasurementUnits } from "../../../services/measurementUnitService";
+import { getProducts } from "../../../services/productService";
 import useStyles from "./useStyles";
-import { MeasurementUnit } from "../../../interfaces/MeasurementUnit";
+import { Product } from "../../../interfaces/Product";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import { inventoryMeasurementUnitCe } from "../Sidebar/RoutesAdmin";
+import { inventoryProductCe } from "../Sidebar/RoutesAdmin";
 
-interface IViewMeasurementUnit {
+interface IViewProduct {
 	title: string;
 }
 
-const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
+const ViewProduct: React.FC<IViewProduct> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
-	const [pageable, setPageable] = useState<Pageable<MeasurementUnit>>({} as Pageable<MeasurementUnit>);
+	const [pageable, setPageable] = useState<Pageable<Product>>({} as Pageable<Product>);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	// paginação
@@ -43,7 +43,7 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 
 	const getData = async (page: number, rowsPerPage: number) => {
 		setLoading(true);
-		const data = await getMeasurementUnits(page, rowsPerPage);
+		const data = await getProducts(page, rowsPerPage);
 		setPageable(data);
 		setLoading(false);
 	}
@@ -63,12 +63,12 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 		setPage(0);
 	}
 
-	const handleClickEditMeasurementUnit = (id: number) => {
-		history.push(`${inventoryMeasurementUnitCe}/${id}`);
+	const handleClickEditProduct = (id: number) => {
+		history.push(`${inventoryProductCe}/${id}`);
 	}
 
-	const handleClickAddMeasurementUnit = () => {
-		history.push(inventoryMeasurementUnitCe);
+	const handleClickAddProduct = () => {
+		history.push(inventoryProductCe);
 	}
 
 	return (
@@ -91,12 +91,15 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 					</div> :
 					<React.Fragment>
 						<TableContainer component={Paper}>
-							<Table aria-label="minhas unidades de medida">
+							<Table aria-label="meus produtos">
 								<TableHead>
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
+                                        <TableCell align="left">Marca</TableCell>
+                                        <TableCell align="left">Produto de Medida</TableCell>
 										<TableCell align="left">Nome</TableCell>
-                                        <TableCell align="left">Prefixo</TableCell>
+										<TableCell align="left">Modelo</TableCell>
+										<TableCell align="left">Serial</TableCell>
 										<TableCell align="left">Data do cadastro</TableCell>
 										<TableCell align="left">Última atualização</TableCell>
 										<TableCell />
@@ -107,17 +110,20 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 										pageable?.content?.map((row, index) => (
 											<TableRow key={index}>
 												<TableCell align="left">{row.id}</TableCell>
+                                                <TableCell align="left">{row.brand?.name}</TableCell>
+                                                <TableCell align="left">{row.measurementUnit?.prefix}</TableCell>
 												<TableCell align="left">{row.name}</TableCell>
-                                                <TableCell align="left">{row.prefix}</TableCell>
+												<TableCell align="left">{row.model}</TableCell>
+												<TableCell align="left">{row.serial}</TableCell>
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY")}</TableCell>
 												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY")}</TableCell>
 												<TableCell align="left">
-													<Tooltip title="Editar Unidade">
+													<Tooltip title="Editar Produto">
 														<IconButton
 															id={`editar-${row?.id}`}
 															aria-label="edit"
 															className={classes.marginIcon}
-															onClick={() => handleClickEditMeasurementUnit(row?.id)}>
+															onClick={() => handleClickEditProduct(row?.id)}>
 															<EditIcon />
 														</IconButton>
 													</Tooltip>
@@ -125,7 +131,7 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 											</TableRow>
 										)) :
 										<TableRow>
-											<TableCell align="center" colSpan={6}>
+											<TableCell align="center" colSpan={9}>
 												<Typography variant="subtitle1">Nenhum Registro encontrado!</Typography>
 											</TableCell>
 										</TableRow>
@@ -143,13 +149,13 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Unidade">
+						<Tooltip title="Adicionar Produto">
 							<Fab
-								name="adicionar-unidade"
+								name="adicionar-produto"
 								color="secondary"
 								aria-label="add"
 								className={classes.fab}
-								onClick={handleClickAddMeasurementUnit}>
+								onClick={handleClickAddProduct}>
 								<AddIcon />
 							</Fab>
 						</Tooltip>
@@ -162,4 +168,4 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 	);
 }
 
-export default memo(ViewMeasurementUnit);
+export default memo(ViewProduct);
