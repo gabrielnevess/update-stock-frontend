@@ -42,7 +42,7 @@ const CreateEditMeasurementUnit: React.FC = () => {
 			.nullable(false)
             .required("nome da unidade de medida é obrigatório"),
         prefix: Yup.string()
-			.min(3, "prefixo deve ter no minímo 3 caracteres")
+			.min(1, "prefixo deve ter no minímo 1 caractere")
 			.max(50, "prefixo deve ter no máximo 50 caracteres")
 			.nullable(false)
             .required("prefixo é obrigatório")

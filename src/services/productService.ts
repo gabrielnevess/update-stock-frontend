@@ -23,15 +23,22 @@ export const saveUpdateProduct = async<T>(object: T, method: any = "post"): Prom
     }
 }
 
-export const getProducts = async (page: number, size: number): Promise<any> => {
+export const getProducts = async (page?: number, size?: number): Promise<any> => {
     try {
-        const { data } = await api.get(`/product?offset=${page}&limit=${size}`, {
+
+        let query = "";
+        if((page !== undefined) && (size !== undefined)) {
+            query += `?offset=${page}&limit=${size}`;
+        } 
+
+        const { data } = await api.get(`/product${query}`, {
             headers: {
                 "Content-Type": "application/json"
             }
         });
         return data;
     } catch (error) {
+        console.log("error: ", error);
         if (error?.response?.data?.message) {
             toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
         } else {

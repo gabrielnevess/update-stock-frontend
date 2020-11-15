@@ -23,9 +23,15 @@ export const saveUpdateMeasurementUnit = async<T>(object: T, method: any = "post
     }
 }
 
-export const getMeasurementUnits = async (page: number, size: number): Promise<any> => {
+export const getMeasurementUnits = async (page?: number, size?: number): Promise<any> => {
     try {
-        const { data } = await api.get(`/measurementUnit?offset=${page}&limit=${size}`, {
+
+        let query = "";
+        if((page !== undefined) && (size !== undefined)) {
+            query += `?offset=${page}&limit=${size}`;
+        } 
+
+        const { data } = await api.get(`/measurementUnit${query}`, {
             headers: {
                 "Content-Type": "application/json"
             }

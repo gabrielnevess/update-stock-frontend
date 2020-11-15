@@ -120,7 +120,7 @@ export const routesAdmin: IRoutes[] = [
     {
         path: inventoryMeasurementUnit,
         exact: true,
-        component: () => <ViewMeasurementUnit title="Unidades" />
+        component: () => <ViewMeasurementUnit title="Unidades de medidas" />
     },
     {
         path: inventoryMeasurementUnitCe,

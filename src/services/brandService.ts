@@ -23,9 +23,15 @@ export const saveUpdateBrand = async<T>(object: T, method: any = "post"): Promis
     }
 }
 
-export const getBrands = async (page: number, size: number): Promise<any> => {
+export const getBrands = async (page?: number, size?: number): Promise<any> => {
     try {
-        const { data } = await api.get(`/brand?offset=${page}&limit=${size}`, {
+
+        let query = "";
+        if((page !== undefined) && (size !== undefined)) {
+            query += `?offset=${page}&limit=${size}`;
+        } 
+
+        const { data } = await api.get(`/brand${query}`, {
             headers: {
                 "Content-Type": "application/json"
             }

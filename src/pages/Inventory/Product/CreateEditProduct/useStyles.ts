@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    formControl: {
+        margin: theme.spacing(2, 0, 2),
+        minWidth: 120,
+        width: "100%"
+    },
 }));
 
 export default useStyles;

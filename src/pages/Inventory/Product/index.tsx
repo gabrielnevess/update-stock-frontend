@@ -96,7 +96,7 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
                                         <TableCell align="left">Marca</TableCell>
-                                        <TableCell align="left">Produto de Medida</TableCell>
+                                        <TableCell align="left">Unidade de Medida</TableCell>
 										<TableCell align="left">Nome</TableCell>
 										<TableCell align="left">Modelo</TableCell>
 										<TableCell align="left">Serial</TableCell>
