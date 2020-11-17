@@ -38,7 +38,6 @@ export const getProducts = async (page?: number, size?: number): Promise<any> =>
         });
         return data;
     } catch (error) {
-        console.log("error: ", error);
         if (error?.response?.data?.message) {
             toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
         } else {

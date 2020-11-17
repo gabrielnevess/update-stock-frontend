@@ -12,29 +12,27 @@ import {
 	TablePagination,
 	Box,
 	Tooltip,
-	Fab,
-	IconButton
+	Fab
 } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { getProducts } from "../../../services/productService";
+import { getProductInputs } from "../../../services/productInputService";
 import useStyles from "./useStyles";
-import { Product } from "../../../interfaces/Product";
+import { ProductInput } from "../../../interfaces/ProductInput";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
-import EditIcon from "@material-ui/icons/Edit";
-import { inventoryProductCe } from "../Sidebar/RoutesAdmin";
+import { inventoryProductInputC } from "../Sidebar/RoutesAdmin";
 
-interface IViewProduct {
+interface IViewProductInput {
 	title: string;
 }
 
-const ViewProduct: React.FC<IViewProduct> = (props) => {
+const ViewProductInput: React.FC<IViewProductInput> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
-	const [pageable, setPageable] = useState<Pageable<Product>>({} as Pageable<Product>);
+	const [pageable, setPageable] = useState<Pageable<ProductInput>>({} as Pageable<ProductInput>);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	// paginação
@@ -43,7 +41,7 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 
 	const getData = async (page: number, rowsPerPage: number) => {
 		setLoading(true);
-		const data = await getProducts(page, rowsPerPage);
+		const data = await getProductInputs(page, rowsPerPage);
 		setPageable(data);
 		setLoading(false);
 	}
@@ -63,12 +61,8 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 		setPage(0);
 	}
 
-	const handleClickEditProduct = (id: number) => {
-		history.push(`${inventoryProductCe}/${id}`);
-	}
-
-	const handleClickAddProduct = () => {
-		history.push(inventoryProductCe);
+	const handleClickAddProductInput = () => {
+		history.push(inventoryProductInputC);
 	}
 
 	return (
@@ -95,14 +89,9 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 								<TableHead>
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
-                                        <TableCell align="left">Marca</TableCell>
-                                        <TableCell align="left">Unidade de Medida</TableCell>
-										<TableCell align="left">Nome</TableCell>
-										<TableCell align="left">Modelo</TableCell>
-										<TableCell align="left">Serial</TableCell>
-										<TableCell align="left">Data do cadastro</TableCell>
-										<TableCell align="left">Última atualização</TableCell>
-										<TableCell />
+                                        <TableCell align="left">Produto</TableCell>
+                                        <TableCell align="left">Qtd. entrada de produtos</TableCell>
+										<TableCell align="left">Data da entrada</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -110,28 +99,13 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 										pageable?.content?.map((row, index) => (
 											<TableRow key={index}>
 												<TableCell align="left">{row.id}</TableCell>
-                                                <TableCell align="left">{row.brand?.name}</TableCell>
-                                                <TableCell align="left">{row.measurementUnit?.prefix}</TableCell>
-												<TableCell align="left">{row.name}</TableCell>
-												<TableCell align="left">{row.model}</TableCell>
-												<TableCell align="left">{row.serial}</TableCell>
+                                                <TableCell align="left">{row?.product?.name} - {row?.product?.model}</TableCell>
+                                                <TableCell align="left">{row.qtd}</TableCell>
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
-												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
-												<TableCell align="left">
-													<Tooltip title="Editar Produto">
-														<IconButton
-															id={`editar-${row?.id}`}
-															aria-label="edit"
-															className={classes.marginIcon}
-															onClick={() => handleClickEditProduct(row?.id)}>
-															<EditIcon />
-														</IconButton>
-													</Tooltip>
-												</TableCell>
 											</TableRow>
 										)) :
 										<TableRow>
-											<TableCell align="center" colSpan={9}>
+											<TableCell align="center" colSpan={4}>
 												<Typography variant="subtitle1">Nenhum Registro encontrado!</Typography>
 											</TableCell>
 										</TableRow>
@@ -149,13 +123,13 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Produto">
+						<Tooltip title="Adicionar Entrada de Produto">
 							<Fab
-								name="adicionar-produto"
+								name="adicionar-entrada"
 								color="secondary"
 								aria-label="add"
 								className={classes.fab}
-								onClick={handleClickAddProduct}>
+								onClick={handleClickAddProductInput}>
 								<AddIcon />
 							</Fab>
 						</Tooltip>
@@ -168,4 +142,4 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 	);
 }
 
-export default memo(ViewProduct);
+export default memo(ViewProductInput);

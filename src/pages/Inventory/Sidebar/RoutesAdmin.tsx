@@ -10,6 +10,12 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
 
+import ViewProductInput from "../ProductInput";
+import CreateProductInput from "../ProductInput/CreateProductInput";
+
+import ViewProductOutput from "../ProductOutput";
+import CreateProductOutput from "../ProductOutput/CreateProductOutput";
+
 import ViewBrand from "../Brand";
 import CreateEditBrand from "../Brand/CreateEditBrand";
 
@@ -22,7 +28,11 @@ import CreateEditProduct from "../Product/CreateEditProduct";
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
 export const inventoryProductInput: string = "/inventario/entradas";
+export const inventoryProductInputC: string = "/inventario/c-entradas";
+
 export const inventoryProductOutput: string = "/inventario/saidas";
+export const inventoryProductOutputC: string = "/inventario/c-saidas";
+
 //unidades
 export const inventoryMeasurementUnit: string = "/inventario/unidades";
 export const inventoryMeasurementUnitCe: string = "/inventario/ce-unidades";
@@ -101,6 +111,26 @@ export const routesAdmin: IRoutes[] = [
         path: homeInventory,
         exact: true,
         component: () => <div>Home</div>
+    },
+    {
+        path: inventoryProductInput,
+        exact: true,
+        component: () => <ViewProductInput title="Entradas" />
+    },
+    {
+        path: inventoryProductInputC,
+        exact: true,
+        component: () => <CreateProductInput />
+    },
+    {
+        path: inventoryProductOutput,
+        exact: true,
+        component: () => <ViewProductOutput title="Saídas" />
+    },
+    {
+        path: inventoryProductOutputC,
+        exact: true,
+        component: () => <CreateProductOutput />
     },
     {
         path: inventoryBrand,

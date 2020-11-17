@@ -91,7 +91,7 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 					</div> :
 					<React.Fragment>
 						<TableContainer component={Paper}>
-							<Table aria-label="minhas unidades de medida">
+							<Table>
 								<TableHead>
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
@@ -109,8 +109,8 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 												<TableCell align="left">{row.id}</TableCell>
 												<TableCell align="left">{row.name}</TableCell>
                                                 <TableCell align="left">{row.prefix}</TableCell>
-												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY")}</TableCell>
-												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY")}</TableCell>
+												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
+												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">
 													<Tooltip title="Editar Unidade">
 														<IconButton
@@ -133,7 +133,7 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 								</TableBody>
 							</Table>
 							<TablePagination
-								labelRowsPerPage={"Qtd de pedidos"}
+								labelRowsPerPage={"Qtd de itens"}
 								rowsPerPageOptions={[5, 10, 25]}
 								component="div"
 								count={pageable?.totalElements || 0}

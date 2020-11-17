@@ -91,7 +91,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 					</div> :
 					<React.Fragment>
 						<TableContainer component={Paper}>
-							<Table aria-label="minhas marcas">
+							<Table>
 								<TableHead>
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
@@ -107,8 +107,8 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 											<TableRow key={index}>
 												<TableCell align="left">{row.id}</TableCell>
 												<TableCell align="left">{row.name}</TableCell>
-												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY")}</TableCell>
-												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY")}</TableCell>
+												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
+												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">
 													<Tooltip title="Editar Marca">
 														<IconButton
@@ -131,7 +131,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 								</TableBody>
 							</Table>
 							<TablePagination
-								labelRowsPerPage={"Qtd de pedidos"}
+								labelRowsPerPage={"Qtd de itens"}
 								rowsPerPageOptions={[5, 10, 25]}
 								component="div"
 								count={pageable?.totalElements || 0}
