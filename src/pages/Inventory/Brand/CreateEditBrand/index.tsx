@@ -37,7 +37,7 @@ const CreateEditBrand: React.FC = () => {
 
 	const validationSchema = Yup.object().shape({
 		name: Yup.string()
-			.min(3, "nome da marca deve ter no minímo 3 caracteres")
+			.min(2, "nome da marca deve ter no minímo 3 caracteres")
 			.max(50, "nome da marca deve ter no máximo 50 caracteres")
 			.nullable(false)
             .required("nome da marca é obrigatório")
