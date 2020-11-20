@@ -4,22 +4,25 @@ import {
     Route,
     Switch
 } from "react-router-dom";
+import PublicRoute from "./PublicRoute";
 import Sidebar from "../pages/Inventory/Sidebar";
-import { linksAdmin, routesAdmin } from "../pages/Inventory/Sidebar/RoutesAdmin";
+import Login from "../pages/Auth/Login";
+import PrivateRoute from "./PrivateRoute";
 
 const Routes: React.FC = () => {
     return (
         <Switch>
-            
-            <Route path="/inventario">
-                <Sidebar
-                    links={linksAdmin}
-                    routes={routesAdmin}
-                />
-            </Route>
+
+            <PublicRoute path="/entrar">
+                <Login />
+            </PublicRoute>
+
+            <PrivateRoute path="/inventario">
+                <Sidebar />
+            </PrivateRoute>
 
             <Route path="*">
-                <Redirect to="/inventario" />
+                <Redirect to="/entrar" />
             </Route>
 
         </Switch>

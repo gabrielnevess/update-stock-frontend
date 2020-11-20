@@ -3,7 +3,7 @@ import clsx from "clsx";
 import {
 	Switch,
 	Link,
-    Route
+	useHistory
 } from "react-router-dom";
 import {
 	Drawer,
@@ -23,7 +23,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import useStyles from "./useStyles";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-//import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PrivateRoute from "../../../routes/PrivateRoute";
+import AlertDialog from "../../../components/AlertDialog";
+import { useAuth } from "../../../hooks/auth";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { linksAdmin, routesAdmin } from "./RoutesAdmin";
 
 export interface ILink {
 	name: string;
@@ -45,11 +49,6 @@ interface ICollapse {
 export interface ILinks {
 	collapse?: ICollapse;
 	sidebar: ILink[];
-}
-
-interface ISidebar {
-	links: ILinks[];
-	routes: IRoutes[];
 }
 
 const LinksSidebar = (props: { sidebar: ILink[] }) => {
@@ -126,55 +125,52 @@ const NestedList = (props: { links: ILinks[] }) => {
 
 }
 
-const Sidebar: React.FC<ISidebar> = (props) => {
+const Sidebar: React.FC = () => {
 	const classes = useStyles();
+	const { signOut, logged } = useAuth();
 	const [open, setOpen] = useState<boolean>(false);
-	//const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
-	//const history = useHistory();
-	const { links, routes } = props;
+	const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
+	const history = useHistory();
 
-	// const handleLogout = () => {
-	// 	signOut()
-	// 	history.push("/");
-	// }
+	const links: ILinks[] = 
+		(logged?.isAdminLogged ? [...linksAdmin] : []);
 
-	// const handleOpenDialogLogout = () => {
-	// 	setOpenAlertDialog(true);
-	// }
+	const routes: IRoutes[] = 
+		(logged?.isAdminLogged ? [...routesAdmin] : []);
 
-	// const handleDialogClose = () => {
-	// 	setOpenAlertDialog(false);
-	// }
+	const handleLogout = () => {
+		signOut()
+		history.push("/");
+	}
 
-	// const handleDialogConfirm = () => {
-	// 	setOpenAlertDialog(false);
-	// 	handleLogout();
-	// }
+	const handleDialogOpenClose = () => {
+		setOpenAlertDialog(!openAlertDialog);
+	}
 
-	const handleDrawerOpen = () => {
-		setOpen(true);
+	const handleDialogConfirm = () => {
+		setOpenAlertDialog(!openAlertDialog);
+		handleLogout();
+	}
+
+	const handleDrawerOpenClose = () => {
+		setOpen(!open);
 	};
-
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
-
 
 	return (
 		<div className={classes.root}>
 
-			{/* {
+			{
 				openAlertDialog &&
 				<AlertDialog
 					titleButtonConfirm={"Sim"}
 					titleButtonClose={"Não"}
 					description={"Deseja realmente sair da aplicação?"}
 					title={"Atenção"}
-					handleDialogClose={handleDialogClose}
+					handleDialogClose={handleDialogOpenClose}
 					handleDialogConfirm={handleDialogConfirm}
 					openAlertDialog={openAlertDialog}
 				/>
-			} */}
+			}
 
 			<AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
 				<Toolbar className={clsx(classes.toolbar, open && classes.drawerClosed)}>
@@ -182,7 +178,7 @@ const Sidebar: React.FC<ISidebar> = (props) => {
 						edge="start"
 						color="inherit"
 						aria-label="open drawer"
-						onClick={handleDrawerOpen}
+						onClick={handleDrawerOpenClose}
 						className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
 					>
 						<MenuIcon />
@@ -197,7 +193,7 @@ const Sidebar: React.FC<ISidebar> = (props) => {
 				open={open}
 			>
 				<div className={classes.toolbarIcon}>
-					<IconButton onClick={handleDrawerClose}>
+					<IconButton onClick={handleDrawerOpenClose}>
 						<ChevronLeftIcon />
 					</IconButton>
 				</div>
@@ -208,15 +204,15 @@ const Sidebar: React.FC<ISidebar> = (props) => {
 						aria-labelledby="nested-list-subheader"
 					>
 						<NestedList links={links} />
-					{/* <ListItem
-						button
-						onClick={handleOpenDialogLogout}
-					>
-						<ListItemIcon>
-							<ExitToAppIcon />
-						</ListItemIcon>
-						<ListItemText primary={"Sair"} />
-					</ListItem> */}
+						<ListItem
+							button
+							onClick={handleDialogOpenClose}
+						>
+							<ListItemIcon>
+								<ExitToAppIcon />
+							</ListItemIcon>
+							<ListItemText primary={"Sair"} />
+						</ListItem>
 					</List>
 				</React.Fragment>
 			</Drawer>
@@ -226,7 +222,7 @@ const Sidebar: React.FC<ISidebar> = (props) => {
 					<Switch>
 						{
 							routes.map((route: IRoutes, index: number) => (
-								<Route
+								<PrivateRoute
 									key={index}
 									path={route.path}
 									exact={route.exact}
