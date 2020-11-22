@@ -27,7 +27,7 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { RestError } from "../../../../interfaces/RestError";
-import { inventoryProductOutput } from "../../Sidebar/RoutesAdmin";
+import { inventoryProductOutput } from "../../Sidebar/Menu";
 import { saveProductOutput } from "../../../../services/productOutputService";
 import Input from "../../../../components/Input";
 import { Product } from "../../../../interfaces/Product";

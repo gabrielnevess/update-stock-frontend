@@ -1,18 +1,14 @@
 import React, { createContext, useCallback, useState, useContext } from "react";
 import { UserLoginDto } from "../dto/UserLoginDto";
 import * as jwt from "jsonwebtoken";
-import Constants from "../utils/Constants";
 import { TokenDto } from "../dto/TokenDto";
 import api from "../services/api";
 import { login } from "../services/authService";
 
 interface Logged {
-    login: string;
-    email: string;
     name: string;
-    role: string;
+    roles: string[];
     isLogged: boolean;
-    isAdminLogged: boolean;
 }
 
 interface AuthState {
@@ -39,12 +35,9 @@ const AuthProvider: React.FC = ({ children }) => {
             return {
                 token: token,
                 logged: {
-                    login: (tokenDecoded as Logged)?.login,
-                    email: (tokenDecoded as Logged)?.email,
                     name: (tokenDecoded as Logged)?.name,
-                    role: (tokenDecoded as Logged)?.role,
-                    isLogged: tokenDecoded ? true : false,
-                    isAdminLogged: (tokenDecoded as Logged)?.role  === Constants.ROLE_ADMIN
+                    roles: (tokenDecoded as Logged)?.roles,
+                    isLogged: tokenDecoded ? true : false
                 }
             }
         }
@@ -63,12 +56,9 @@ const AuthProvider: React.FC = ({ children }) => {
             setData({
                 token: resp?.token,
                 logged: {
-                    login: (tokenDecoded as Logged)?.login,
-                    email: (tokenDecoded as Logged)?.email,
                     name: (tokenDecoded as Logged)?.name,
-                    role: (tokenDecoded as Logged)?.role,
-                    isLogged: tokenDecoded ? true : false,
-                    isAdminLogged: (tokenDecoded as Logged)?.role === Constants.ROLE_ADMIN
+                    roles: (tokenDecoded as Logged)?.roles,
+                    isLogged: tokenDecoded ? true : false
                 }
             });
         }

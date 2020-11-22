@@ -24,7 +24,12 @@ import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import { inventoryMeasurementUnitCe } from "../Sidebar/RoutesAdmin";
+import { inventoryMeasurementUnitCe } from "../Sidebar/Menu";
+import { 
+	isPermissionValid, 
+	ROLE_CADASTRAR_UNIDADE_MEDIDA 
+} from "../Sidebar/Menu/permissions";
+import { useAuth } from "../../../hooks/auth";
 
 interface IViewMeasurementUnit {
 	title: string;
@@ -34,6 +39,7 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
+	const { logged } = useAuth();
 	const [pageable, setPageable] = useState<Pageable<MeasurementUnit>>({} as Pageable<MeasurementUnit>);
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -112,15 +118,18 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">
-													<Tooltip title="Editar Unidade">
-														<IconButton
-															id={`editar-${row?.id}`}
-															aria-label="edit"
-															className={classes.marginIcon}
-															onClick={() => handleClickEditMeasurementUnit(row?.id)}>
-															<EditIcon />
-														</IconButton>
-													</Tooltip>
+													{
+														isPermissionValid(logged?.roles, ROLE_CADASTRAR_UNIDADE_MEDIDA) &&
+														<Tooltip title="Editar Unidade de Medida">
+															<IconButton
+																id={`editar-${row?.id}`}
+																aria-label="edit"
+																className={classes.marginIcon}
+																onClick={() => handleClickEditMeasurementUnit(row?.id)}>
+																<EditIcon />
+															</IconButton>
+														</Tooltip>
+													}
 												</TableCell>
 											</TableRow>
 										)) :
@@ -143,16 +152,19 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Unidade">
-							<Fab
-								name="adicionar-unidade"
-								color="secondary"
-								aria-label="add"
-								className={classes.fab}
-								onClick={handleClickAddMeasurementUnit}>
-								<AddIcon />
-							</Fab>
-						</Tooltip>
+						{
+							isPermissionValid(logged?.roles, ROLE_CADASTRAR_UNIDADE_MEDIDA) &&
+							<Tooltip title="Adicionar Unidade de Medida">
+								<Fab
+									name="adicionar-unidade"
+									color="secondary"
+									aria-label="add"
+									className={classes.fab}
+									onClick={handleClickAddMeasurementUnit}>
+									<AddIcon />
+								</Fab>
+							</Tooltip>
+						}
 					</React.Fragment>
 				}
 

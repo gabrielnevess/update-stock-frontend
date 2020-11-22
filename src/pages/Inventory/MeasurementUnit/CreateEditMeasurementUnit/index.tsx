@@ -21,7 +21,7 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { RestError } from "../../../../interfaces/RestError";
-import { inventoryMeasurementUnit } from "../../Sidebar/RoutesAdmin";
+import { inventoryMeasurementUnit } from "../../Sidebar/Menu";
 import { getMeasurementUnitById, saveUpdateMeasurementUnit } from "../../../../services/measurementUnitService";
 import Input from "../../../../components/Input";
 

@@ -24,7 +24,12 @@ import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import { inventoryProductCe } from "../Sidebar/RoutesAdmin";
+import { inventoryProductCe } from "../Sidebar/Menu";
+import { 
+	isPermissionValid, 
+	ROLE_CADASTRAR_PRODUTO 
+} from "../Sidebar/Menu/permissions";
+import { useAuth } from "../../../hooks/auth";
 
 interface IViewProduct {
 	title: string;
@@ -34,6 +39,7 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
+	const { logged } = useAuth();
 	const [pageable, setPageable] = useState<Pageable<Product>>({} as Pageable<Product>);
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -118,15 +124,18 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">
-													<Tooltip title="Editar Produto">
-														<IconButton
-															id={`editar-${row?.id}`}
-															aria-label="edit"
-															className={classes.marginIcon}
-															onClick={() => handleClickEditProduct(row?.id)}>
-															<EditIcon />
-														</IconButton>
-													</Tooltip>
+													{
+														isPermissionValid(logged?.roles, ROLE_CADASTRAR_PRODUTO) &&
+														<Tooltip title="Editar Produto">
+															<IconButton
+																id={`editar-${row?.id}`}
+																aria-label="edit"
+																className={classes.marginIcon}
+																onClick={() => handleClickEditProduct(row?.id)}>
+																<EditIcon />
+															</IconButton>
+														</Tooltip>
+													}
 												</TableCell>
 											</TableRow>
 										)) :
@@ -149,16 +158,19 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Produto">
-							<Fab
-								name="adicionar-produto"
-								color="secondary"
-								aria-label="add"
-								className={classes.fab}
-								onClick={handleClickAddProduct}>
-								<AddIcon />
-							</Fab>
-						</Tooltip>
+						{
+							isPermissionValid(logged?.roles, ROLE_CADASTRAR_PRODUTO) &&
+							<Tooltip title="Adicionar Produto">
+								<Fab
+									name="adicionar-produto"
+									color="secondary"
+									aria-label="add"
+									className={classes.fab}
+									onClick={handleClickAddProduct}>
+									<AddIcon />
+								</Fab>
+							</Tooltip>
+						}
 					</React.Fragment>
 				}
 

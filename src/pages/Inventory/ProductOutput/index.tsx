@@ -22,7 +22,12 @@ import { ProductOutput } from "../../../interfaces/ProductOutput";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
-import { inventoryProductOutputC } from "../Sidebar/RoutesAdmin";
+import { inventoryProductOutputC } from "../Sidebar/Menu";
+import { 
+	isPermissionValid, 
+	ROLE_CADASTRAR_SAIDA_PRODUTO 
+} from "../Sidebar/Menu/permissions";
+import { useAuth } from "../../../hooks/auth";
 
 interface IViewProductOutput {
 	title: string;
@@ -32,6 +37,7 @@ const ViewProductOutput: React.FC<IViewProductOutput> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
+	const { logged } = useAuth();
 	const [pageable, setPageable] = useState<Pageable<ProductOutput>>({} as Pageable<ProductOutput>);
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -123,16 +129,19 @@ const ViewProductOutput: React.FC<IViewProductOutput> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Saída de Produto">
-							<Fab
-								name="adicionar-saida"
-								color="secondary"
-								aria-label="add"
-								className={classes.fab}
-								onClick={handleClickAddProductOutput}>
-								<AddIcon />
-							</Fab>
-						</Tooltip>
+						{
+							isPermissionValid(logged?.roles, ROLE_CADASTRAR_SAIDA_PRODUTO) &&
+							<Tooltip title="Adicionar Saída de Produto">
+								<Fab
+									name="adicionar-saida"
+									color="secondary"
+									aria-label="add"
+									className={classes.fab}
+									onClick={handleClickAddProductOutput}>
+									<AddIcon />
+								</Fab>
+							</Tooltip>
+						}
 					</React.Fragment>
 				}
 

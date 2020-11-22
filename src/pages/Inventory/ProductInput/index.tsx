@@ -22,7 +22,12 @@ import { ProductInput } from "../../../interfaces/ProductInput";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
-import { inventoryProductInputC } from "../Sidebar/RoutesAdmin";
+import { inventoryProductInputC } from "../Sidebar/Menu";
+import { 
+	isPermissionValid, 
+	ROLE_CADASTRAR_ENTRADA_PRODUTO 
+} from "../Sidebar/Menu/permissions";
+import { useAuth } from "../../../hooks/auth";
 
 interface IViewProductInput {
 	title: string;
@@ -32,6 +37,7 @@ const ViewProductInput: React.FC<IViewProductInput> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
+	const { logged } = useAuth();
 	const [pageable, setPageable] = useState<Pageable<ProductInput>>({} as Pageable<ProductInput>);
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -123,16 +129,19 @@ const ViewProductInput: React.FC<IViewProductInput> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Entrada de Produto">
-							<Fab
-								name="adicionar-entrada"
-								color="secondary"
-								aria-label="add"
-								className={classes.fab}
-								onClick={handleClickAddProductInput}>
-								<AddIcon />
-							</Fab>
-						</Tooltip>
+						{
+							isPermissionValid(logged?.roles, ROLE_CADASTRAR_ENTRADA_PRODUTO) &&
+							<Tooltip title="Adicionar Entrada de Produto">
+								<Fab
+									name="adicionar-entrada"
+									color="secondary"
+									aria-label="add"
+									className={classes.fab}
+									onClick={handleClickAddProductInput}>
+									<AddIcon />
+								</Fab>
+							</Tooltip>
+						}
 					</React.Fragment>
 				}
 

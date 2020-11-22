@@ -24,7 +24,12 @@ import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import { inventoryBrandCe } from "../Sidebar/RoutesAdmin";
+import { inventoryBrandCe } from "../Sidebar/Menu";
+import { useAuth } from "../../../hooks/auth";
+import { 
+	isPermissionValid, 
+	ROLE_CADASTRAR_MARCA 
+} from "../Sidebar/Menu/permissions";
 
 interface IViewBrand {
 	title: string;
@@ -34,6 +39,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
+	const { logged } = useAuth();
 	const [pageable, setPageable] = useState<Pageable<Brand>>({} as Pageable<Brand>);
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -110,15 +116,18 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">
-													<Tooltip title="Editar Marca">
-														<IconButton
-															id={`editar-${row?.id}`}
-															aria-label="edit"
-															className={classes.marginIcon}
-															onClick={() => handleClickEditBrand(row?.id)}>
-															<EditIcon />
-														</IconButton>
-													</Tooltip>
+													{
+														isPermissionValid(logged?.roles, ROLE_CADASTRAR_MARCA) &&
+														<Tooltip title="Editar Marca">
+															<IconButton
+																id={`editar-${row?.id}`}
+																aria-label="edit"
+																className={classes.marginIcon}
+																onClick={() => handleClickEditBrand(row?.id)}>
+																<EditIcon />
+															</IconButton>
+														</Tooltip>
+													}
 												</TableCell>
 											</TableRow>
 										)) :
@@ -141,16 +150,19 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 								onChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</TableContainer>
-						<Tooltip title="Adicionar Marca">
-							<Fab
-								name="adicionar-marca"
-								color="secondary"
-								aria-label="add"
-								className={classes.fab}
-								onClick={handleClickAddBrand}>
-								<AddIcon />
-							</Fab>
-						</Tooltip>
+						{
+							isPermissionValid(logged?.roles, ROLE_CADASTRAR_MARCA) &&
+							<Tooltip title="Adicionar Marca">
+								<Fab
+									name="adicionar-marca"
+									color="secondary"
+									aria-label="add"
+									className={classes.fab}
+									onClick={handleClickAddBrand}>
+									<AddIcon />
+								</Fab>
+							</Tooltip>
+						}
 					</React.Fragment>
 				}
 

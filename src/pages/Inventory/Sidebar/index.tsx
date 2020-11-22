@@ -18,6 +18,14 @@ import {
 	List,
 	Collapse
 } from "@material-ui/core";
+import { 
+	ICollapse,
+	ILink, 
+	ILinks, 
+	IRoutes, 
+	setUpLinks,
+	setUpRoutes
+} from "./Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import useStyles from "./useStyles";
@@ -27,29 +35,6 @@ import PrivateRoute from "../../../routes/PrivateRoute";
 import AlertDialog from "../../../components/AlertDialog";
 import { useAuth } from "../../../hooks/auth";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { linksAdmin, routesAdmin } from "./RoutesAdmin";
-
-export interface ILink {
-	name: string;
-	to: string;
-	icon: () => JSX.Element;
-}
-
-export interface IRoutes {
-	exact?: boolean;
-	path: string;
-	component: () => JSX.Element;
-}
-
-interface ICollapse {
-	name: string;
-	icon: () => JSX.Element;
-}
-
-export interface ILinks {
-	collapse?: ICollapse;
-	sidebar: ILink[];
-}
 
 const LinksSidebar = (props: { sidebar: ILink[] }) => {
 	const { sidebar } = props;
@@ -132,11 +117,8 @@ const Sidebar: React.FC = () => {
 	const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
 	const history = useHistory();
 
-	const links: ILinks[] = 
-		(logged?.isAdminLogged ? [...linksAdmin] : []);
-
-	const routes: IRoutes[] = 
-		(logged?.isAdminLogged ? [...routesAdmin] : []);
+	const links: ILinks[] = setUpLinks(logged?.roles);
+	const routes: IRoutes[] = setUpRoutes(logged?.roles);
 
 	const handleLogout = () => {
 		signOut()
