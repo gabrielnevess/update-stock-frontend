@@ -5,7 +5,9 @@ import {
     CircularProgress,
     Typography,
     Paper,
-    Container
+    Container,
+    Grid,
+    Link
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import useStyles from "./useStyles";
@@ -68,7 +70,7 @@ const Login: React.FC = () => {
                             className={classes.logo} />
                         <Typography component="h1" variant="h5" className={classes.title}>
                             Faça o seu Login
-                    </Typography>
+                        </Typography>
                     </div>
 
                     <form
@@ -113,6 +115,20 @@ const Login: React.FC = () => {
                                 className={classes.submit}>Entrar</Button>
                         }
                     </form>
+                    <Grid
+                        container
+                        justify="center"
+                        alignContent="center"
+                        direction="column">
+                        <Grid item>
+                            <Link
+                                href="/recuperar-senha"
+                                variant="body2"
+                            >
+                                {"Esqueceu sua senha? Clique aqui"}
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </Paper>
             </div>
         </Container>

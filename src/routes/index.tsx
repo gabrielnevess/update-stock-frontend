@@ -11,6 +11,8 @@ import PrivateRoute from "./PrivateRoute";
 import { AxiosError, AxiosResponse } from "axios";
 import { useAuth } from "../hooks/auth";
 import api from "../services/api";
+import Forgot from "../pages/Auth/Forgot";
+import PasswordReset from "../pages/Auth/PasswordReset";
 
 const Routes: React.FC = () => {
     const { signOut } = useAuth();
@@ -30,6 +32,14 @@ const Routes: React.FC = () => {
 
             <PublicRoute path="/entrar">
                 <Login />
+            </PublicRoute>
+
+            <PublicRoute path="/recuperar-senha">
+                <Forgot />
+            </PublicRoute>
+
+            <PublicRoute path="/redefinicao-senha">
+                <PasswordReset />
             </PublicRoute>
 
             <PrivateRoute path="/inventario">
