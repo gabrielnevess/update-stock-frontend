@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo, useMemo } from "react";
 import clsx from "clsx";
 import {
 	Switch,
@@ -117,8 +117,8 @@ const Sidebar: React.FC = () => {
 	const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
 	const history = useHistory();
 
-	const links: ILinks[] = setUpLinks(logged?.roles);
-	const routes: IRoutes[] = setUpRoutes(logged?.roles);
+	const links: ILinks[] = useMemo(() => setUpLinks(logged?.roles), [logged?.roles]);
+	const routes: IRoutes[] = useMemo(() => setUpRoutes(logged?.roles), [logged?.roles]);
 
 	const handleLogout = () => {
 		signOut()
@@ -219,4 +219,4 @@ const Sidebar: React.FC = () => {
 	);
 }
 
-export default Sidebar;
+export default memo(Sidebar);
