@@ -46,7 +46,7 @@ export const getProducts = async (page?: number, size?: number): Promise<any> =>
     }
 }
 
-export const getDeleteProduct = async(id: number): Promise<any> => {
+export const deleteProduct = async(id: number): Promise<any> => {
     try {
         const { data } = await api.delete(`/product/${id}`, {
             headers: {

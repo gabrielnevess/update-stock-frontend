@@ -21,15 +21,15 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { RestError } from "../../../../interfaces/RestError";
-import { inventoryBrand } from "../../Sidebar/Menu";
-import { getBrandById, saveUpdateBrand } from "../../../../services/brandService";
+import { inventoryRole } from "../../Sidebar/Menu";
+import { getRoleById, saveUpdateRole } from "../../../../services/roleService";
 import Input from "../../../../components/Input";
 
 interface RouteParams {
     id: string
 }
 
-const CreateEditBrand: React.FC = () => {
+const CreateEditRole: React.FC = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const [loading, setLoading] = useState<boolean>(false);
@@ -37,35 +37,35 @@ const CreateEditBrand: React.FC = () => {
 
 	const validationSchema = Yup.object().shape({
 		name: Yup.string()
-			.min(2, "nome da marca deve ter no minímo 2 caracteres")
-			.max(50, "nome da marca deve ter no máximo 50 caracteres")
+			.min(5, "nome da permissão deve ter no minímo 5 caracteres")
+			.max(50, "nome da permissão deve ter no máximo 50 caracteres")
 			.nullable(false)
-            .required("nome da marca é obrigatório")
+            .required("nome da permissão é obrigatório")
 	});
 
-	const initialBrand = {
+	const initialRole = {
 		id: "",
 		name: ""
 	};
 
-	const [currentBrand, setCurrentBrand] = useState(initialBrand);
+	const [currentRole, setCurrentRole] = useState(initialRole);
 
-	const getBrand = async (id: number) => {
+	const getRole = async (id: number) => {
 		setLoading(true);
-		const data = await getBrandById(id);
+		const data = await getRoleById(id);
 		setLoading(false);
 		if (data) {
-			setCurrentBrand(data);
+			setCurrentRole(data);
 		}
 	}
 
 	useEffect(() => {
 		if (id) {
-			getBrand(parseInt(id));
+			getRole(parseInt(id));
 		}
 	}, [id]);
 
-	const renderTitle = id ? "Atualizar Marca" : "Cadastrar Marca";
+	const renderTitle = id ? "Atualizar Permissão" : "Cadastrar Permissão";
 	const renderButtonText = id ? "Atualizar" : "Salvar";
 
 	return (
@@ -98,7 +98,7 @@ const CreateEditBrand: React.FC = () => {
 
 							<Formik
 								enableReinitialize={true}
-								initialValues={currentBrand}
+								initialValues={currentRole}
 								validationSchema={validationSchema}
 								onSubmit={async (values, { setSubmitting, setFieldError }) => {
 									try {
@@ -107,11 +107,11 @@ const CreateEditBrand: React.FC = () => {
 											...values
 										};
 
-										const data = await saveUpdateBrand(object, values.id ? "put" : "post");
+										const data = await saveUpdateRole(object, values.id ? "put" : "post");
 										setSubmitting(false);
 										if (data) {
-											history.push(inventoryBrand);
-											toast.success("Marca salva com sucesso!");
+											history.push(inventoryRole);
+											toast.success("Permissão salva com sucesso!");
 										}
 									} catch (error) {
 										setSubmitting(false);
@@ -149,7 +149,7 @@ const CreateEditBrand: React.FC = () => {
 														required
 														fullWidth
 														id="name"
-														label="Marca"
+														label="Permissão"
 														onChange={handleChange}
 														onBlur={handleBlur}
 														value={values?.name}
@@ -187,4 +187,4 @@ const CreateEditBrand: React.FC = () => {
 	);
 }
 
-export default memo(CreateEditBrand);
+export default memo(CreateEditRole);

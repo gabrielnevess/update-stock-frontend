@@ -3,11 +3,13 @@ import React from "react";
 import {
     ROLE_CADASTRAR_ENTRADA_PRODUTO,
     ROLE_CADASTRAR_MARCA,
+    ROLE_CADASTRAR_PERMISSAO,
     ROLE_CADASTRAR_PRODUTO,
     ROLE_CADASTRAR_SAIDA_PRODUTO,
     ROLE_CADASTRAR_UNIDADE_MEDIDA,
     ROLE_PESQUISAR_ENTRADA_PRODUTO,
     ROLE_PESQUISAR_MARCA,
+    ROLE_PESQUISAR_PERMISSAO,
     ROLE_PESQUISAR_PRODUTO,
     ROLE_PESQUISAR_SAIDA_PRODUTO,
     ROLE_PESQUISAR_UNIDADE_MEDIDA
@@ -21,6 +23,8 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
+import SecurityIcon from "@material-ui/icons/Security";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 import ViewProductInput from "../../ProductInput";
 import CreateProductInput from "../../ProductInput/CreateProductInput";
@@ -36,6 +40,9 @@ import CreateEditMeasurementUnit from "../../MeasurementUnit/CreateEditMeasureme
 
 import ViewProduct from "../../Product";
 import CreateEditProduct from "../../Product/CreateEditProduct";
+
+import ViewRole from "../../Role";
+import CreateEditRole from "../../Role/CreateEditRole";
 
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
@@ -54,6 +61,9 @@ export const inventoryBrandCe: string = "/inventario/ce-marcas";
 //produtos
 export const inventoryProduct: string = "/inventario/produtos";
 export const inventoryProductCe: string = "/inventario/ce-produtos";
+//produtos
+export const inventoryRole: string = "/inventario/permissoes";
+export const inventoryRoleCe: string = "/inventario/ce-permissoes";
 
 // ---------- TÍTULOS ----------
 const titleHome: string = "Início";
@@ -64,6 +74,10 @@ const titleRegistration: string = "Cadastros";
 const titleMeasurementUnit: string = "Unidades";
 const titleBrand: string = "Marcas";
 const titleProduct: string = "Produtos";
+const titleRole: string = "Permissões";
+
+// configurações
+const titleConfiguration: string = "Configurações";
 
 export interface ILink {
     name: string;
@@ -201,6 +215,30 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         });
     }
 
+    if (permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+        routesSidebar.push({
+            path: inventoryRole,
+            exact: true,
+            component: () => <ViewRole title="Permissões" />
+        });
+    }
+
+    if (permissions.includes(ROLE_CADASTRAR_PERMISSAO)) {
+        routesSidebar.push({
+            path: inventoryRoleCe,
+            exact: true,
+            component: () => <CreateEditRole />
+        });
+    }
+
+    if (permissions.includes(ROLE_CADASTRAR_PERMISSAO)) {
+        routesSidebar.push({
+            path: `${inventoryRoleCe}/:id`,
+            exact: true,
+            component: () => <CreateEditRole />
+        });
+    }
+
     routesSidebar.push({
         path: "*",
         component: () => <NotFound />
@@ -246,9 +284,23 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
         });
     }
 
+    if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+
+        let sidebar: ILink[] = [];
+
+        linksSidebar.push({
+            collapse: {
+                name: titleConfiguration,
+                icon: () => <SettingsIcon />,
+            },
+            sidebar: sidebar
+        });        
+    }
+
     if(permissions.includes(ROLE_PESQUISAR_UNIDADE_MEDIDA) ||
-        permissions.includes(ROLE_PESQUISAR_MARCA) || 
-       permissions.includes(ROLE_PESQUISAR_PRODUTO)) {
+       permissions.includes(ROLE_PESQUISAR_MARCA) || 
+       permissions.includes(ROLE_PESQUISAR_PRODUTO) ||
+       permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
 
         let sidebar: ILink[] = [];
 
@@ -273,6 +325,14 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
                 name: titleProduct,
                 to: inventoryProduct,
                 icon: () => <DevicesOtherIcon />
+            });
+        }
+
+        if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+            sidebar.push({
+                name: titleRole,
+                to: inventoryRole,
+                icon: () => <SecurityIcon />
             });
         }
 

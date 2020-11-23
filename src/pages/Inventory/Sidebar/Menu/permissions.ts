@@ -25,4 +25,8 @@ export const ROLE_CADASTRAR_USUARIO: string = "ROLE_CADASTRAR_USUARIO";
 export const ROLE_REMOVER_USUARIO: string = "ROLE_REMOVER_USUARIO";
 export const ROLE_PESQUISAR_USUARIO: string = "ROLE_PESQUISAR_USUARIO";
 
+export const ROLE_CADASTRAR_PERMISSAO: string = "ROLE_CADASTRAR_PERMISSAO";
+export const ROLE_REMOVER_PERMISSAO: string = "ROLE_REMOVER_PERMISSAO";
+export const ROLE_PESQUISAR_PERMISSAO: string = "ROLE_PESQUISAR_PERMISSAO";
+
 export const isPermissionValid = (permissions: string[], value: string): boolean => permissions.includes(value);

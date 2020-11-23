@@ -17,32 +17,32 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { getMeasurementUnits, deleteMeasurementUnit } from "../../../services/measurementUnitService";
+import { getRoles, deleteRole } from "../../../services/roleService";
 import useStyles from "./useStyles";
-import { MeasurementUnit } from "../../../interfaces/MeasurementUnit";
+import { Role } from "../../../interfaces/Role";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { inventoryMeasurementUnitCe } from "../Sidebar/Menu";
+import { inventoryRoleCe } from "../Sidebar/Menu";
+import { useAuth } from "../../../hooks/auth";
 import { 
 	isPermissionValid, 
-	ROLE_CADASTRAR_UNIDADE_MEDIDA,
-	ROLE_REMOVER_UNIDADE_MEDIDA 
+	ROLE_CADASTRAR_PERMISSAO,
+	ROLE_REMOVER_PERMISSAO
 } from "../Sidebar/Menu/permissions";
-import { useAuth } from "../../../hooks/auth";
 
-interface IViewMeasurementUnit {
+interface IViewRole {
 	title: string;
 }
 
-const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
+const ViewRole: React.FC<IViewRole> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
 	const history = useHistory();
 	const { logged } = useAuth();
-	const [pageable, setPageable] = useState<Pageable<MeasurementUnit>>({} as Pageable<MeasurementUnit>);
+	const [pageable, setPageable] = useState<Pageable<Role>>({} as Pageable<Role>);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	// paginação
@@ -51,7 +51,7 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 
 	const getData = async (page: number, rowsPerPage: number) => {
 		setLoading(true);
-		const data = await getMeasurementUnits(page, rowsPerPage);
+		const data = await getRoles(page, rowsPerPage);
 		setPageable(data);
 		setLoading(false);
 	}
@@ -71,18 +71,18 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 		setPage(0);
 	}
 
-	const handleClickEditMeasurementUnit = (id: number) => {
-		history.push(`${inventoryMeasurementUnitCe}/${id}`);
+	const handleClickEditRole = (id: number) => {
+		history.push(`${inventoryRoleCe}/${id}`);
 	}
 
-	const handleClickDeleteMeasurementUnit = async (id: number) => {
+	const handleClickDeleteRole = async (id: number) => {
 		setLoading(true);
-		await deleteMeasurementUnit(id);
+		await deleteRole(id);
 		getData(page, rowsPerPage);
 	}
 
-	const handleClickAddMeasurementUnit = () => {
-		history.push(inventoryMeasurementUnitCe);
+	const handleClickAddRole = () => {
+		history.push(inventoryRoleCe);
 	}
 
 	return (
@@ -110,7 +110,6 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 									<TableRow>
 										<TableCell align="left">Código</TableCell>
 										<TableCell align="left">Nome</TableCell>
-                                        <TableCell align="left">Prefixo</TableCell>
 										<TableCell align="left">Data do cadastro</TableCell>
 										<TableCell align="left">Última atualização</TableCell>
 										<TableCell />
@@ -123,18 +122,17 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 											<TableRow key={index}>
 												<TableCell align="left">{row.id}</TableCell>
 												<TableCell align="left">{row.name}</TableCell>
-                                                <TableCell align="left">{row.prefix}</TableCell>
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">
 													{
-														isPermissionValid(logged?.roles, ROLE_CADASTRAR_UNIDADE_MEDIDA) &&
-														<Tooltip title="Editar Unidade de Medida">
+														isPermissionValid(logged?.roles, ROLE_CADASTRAR_PERMISSAO) &&
+														<Tooltip title="Editar Permissão">
 															<IconButton
 																id={`editar-${row?.id}`}
 																aria-label="edit"
 																className={classes.marginIcon}
-																onClick={() => handleClickEditMeasurementUnit(row?.id)}>
+																onClick={() => handleClickEditRole(row?.id)}>
 																<EditIcon />
 															</IconButton>
 														</Tooltip>
@@ -142,13 +140,13 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 												</TableCell>
 												<TableCell align="left">
 													{
-														isPermissionValid(logged?.roles, ROLE_REMOVER_UNIDADE_MEDIDA) &&
-														<Tooltip title="Deletar Unidade de Medida">
+														isPermissionValid(logged?.roles, ROLE_REMOVER_PERMISSAO) &&
+														<Tooltip title="Deletar Permissão">
 															<IconButton
 																id={`deletar-${row?.id}`}
 																aria-label="delete"
 																className={classes.marginIcon}
-																onClick={() => handleClickDeleteMeasurementUnit(row?.id)}>
+																onClick={() => handleClickDeleteRole(row?.id)}>
 																<DeleteIcon />
 															</IconButton>
 														</Tooltip>
@@ -176,14 +174,14 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 							/>
 						</TableContainer>
 						{
-							isPermissionValid(logged?.roles, ROLE_CADASTRAR_UNIDADE_MEDIDA) &&
-							<Tooltip title="Adicionar Unidade de Medida">
+							isPermissionValid(logged?.roles, ROLE_CADASTRAR_PERMISSAO) &&
+							<Tooltip title="Adicionar Permissão">
 								<Fab
-									name="adicionar-unidade"
+									name="adicionar-permissao"
 									color="secondary"
 									aria-label="add"
 									className={classes.fab}
-									onClick={handleClickAddMeasurementUnit}>
+									onClick={handleClickAddRole}>
 									<AddIcon />
 								</Fab>
 							</Tooltip>
@@ -197,4 +195,4 @@ const ViewMeasurementUnit: React.FC<IViewMeasurementUnit> = (props) => {
 	);
 }
 
-export default memo(ViewMeasurementUnit);
+export default memo(ViewRole);

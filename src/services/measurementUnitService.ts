@@ -46,7 +46,7 @@ export const getMeasurementUnits = async (page?: number, size?: number): Promise
     }
 }
 
-export const getDeleteMeasurementUnit = async(id: number): Promise<any> => {
+export const deleteMeasurementUnit = async(id: number): Promise<any> => {
     try {
         const { data } = await api.delete(`/measurementUnit/${id}`, {
             headers: {

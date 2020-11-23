@@ -17,17 +17,19 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { getProducts } from "../../../services/productService";
+import { getProducts, deleteProduct } from "../../../services/productService";
 import useStyles from "./useStyles";
 import { Product } from "../../../interfaces/Product";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { inventoryProductCe } from "../Sidebar/Menu";
 import { 
 	isPermissionValid, 
-	ROLE_CADASTRAR_PRODUTO 
+	ROLE_CADASTRAR_PRODUTO,
+	ROLE_REMOVER_PRODUTO
 } from "../Sidebar/Menu/permissions";
 import { useAuth } from "../../../hooks/auth";
 
@@ -73,6 +75,12 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 		history.push(`${inventoryProductCe}/${id}`);
 	}
 
+	const handleClickDeleteProduct = async (id: number) => {
+		setLoading(true);
+		await deleteProduct(id);
+		getData(page, rowsPerPage);
+	}
+
 	const handleClickAddProduct = () => {
 		history.push(inventoryProductCe);
 	}
@@ -109,6 +117,7 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 										<TableCell align="left">Data do cadastro</TableCell>
 										<TableCell align="left">Última atualização</TableCell>
 										<TableCell />
+										<TableCell />
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -133,6 +142,20 @@ const ViewProduct: React.FC<IViewProduct> = (props) => {
 																className={classes.marginIcon}
 																onClick={() => handleClickEditProduct(row?.id)}>
 																<EditIcon />
+															</IconButton>
+														</Tooltip>
+													}
+												</TableCell>
+												<TableCell align="left">
+													{
+														isPermissionValid(logged?.roles, ROLE_REMOVER_PRODUTO) &&
+														<Tooltip title="Deletar Produto">
+															<IconButton
+																id={`deletar-${row?.id}`}
+																aria-label="delete"
+																className={classes.marginIcon}
+																onClick={() => handleClickDeleteProduct(row?.id)}>
+																<DeleteIcon />
 															</IconButton>
 														</Tooltip>
 													}

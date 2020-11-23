@@ -17,18 +17,20 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { getBrands } from "../../../services/brandService";
+import { getBrands, deleteBrand } from "../../../services/brandService";
 import useStyles from "./useStyles";
 import { Brand } from "../../../interfaces/Brand";
 import { Pageable } from "../../../interfaces/Pageable";
 import AddIcon from "@material-ui/icons/Add";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { inventoryBrandCe } from "../Sidebar/Menu";
 import { useAuth } from "../../../hooks/auth";
 import { 
 	isPermissionValid, 
-	ROLE_CADASTRAR_MARCA 
+	ROLE_CADASTRAR_MARCA,
+	ROLE_REMOVER_MARCA
 } from "../Sidebar/Menu/permissions";
 
 interface IViewBrand {
@@ -73,6 +75,12 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 		history.push(`${inventoryBrandCe}/${id}`);
 	}
 
+	const handleClickDeleteBrand = async (id: number) => {
+		setLoading(true);
+		await deleteBrand(id);
+		getData(page, rowsPerPage);
+	}
+
 	const handleClickAddBrand = () => {
 		history.push(inventoryBrandCe);
 	}
@@ -105,6 +113,7 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 										<TableCell align="left">Data do cadastro</TableCell>
 										<TableCell align="left">Última atualização</TableCell>
 										<TableCell />
+										<TableCell />
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -129,10 +138,24 @@ const ViewBrand: React.FC<IViewBrand> = (props) => {
 														</Tooltip>
 													}
 												</TableCell>
+												<TableCell align="left">
+													{
+														isPermissionValid(logged?.roles, ROLE_REMOVER_MARCA) &&
+														<Tooltip title="Deletar Marca">
+															<IconButton
+																id={`deletar-${row?.id}`}
+																aria-label="delete"
+																className={classes.marginIcon}
+																onClick={() => handleClickDeleteBrand(row?.id)}>
+																<DeleteIcon />
+															</IconButton>
+														</Tooltip>
+													}
+												</TableCell>
 											</TableRow>
 										)) :
 										<TableRow>
-											<TableCell align="center" colSpan={5}>
+											<TableCell align="center" colSpan={6}>
 												<Typography variant="subtitle1">Nenhum Registro encontrado!</Typography>
 											</TableCell>
 										</TableRow>
