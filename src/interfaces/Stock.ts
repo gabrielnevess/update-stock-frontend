@@ -1,6 +1,8 @@
+import { Product } from "./Product";
+
 export interface Stock {
     id: number;
-    productId: number;
+    product: Product;
 	qtd: number;
 	createdAt?: Date;
 	updatedAt?: Date;

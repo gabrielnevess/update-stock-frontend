@@ -58,7 +58,7 @@ export const deleteProduct = async(id: number): Promise<any> => {
         if (error?.response?.data?.message) {
             toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
         } else {
-            toast.error("Erro ao buscar o produto!");
+            toast.error("Erro ao deletar o produto!");
         }
     }
 }

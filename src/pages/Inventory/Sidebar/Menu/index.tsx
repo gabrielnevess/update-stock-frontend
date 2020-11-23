@@ -8,6 +8,7 @@ import {
     ROLE_CADASTRAR_SAIDA_PRODUTO,
     ROLE_CADASTRAR_UNIDADE_MEDIDA,
     ROLE_PESQUISAR_ENTRADA_PRODUTO,
+    ROLE_PESQUISAR_ESTOQUE,
     ROLE_PESQUISAR_MARCA,
     ROLE_PESQUISAR_PERMISSAO,
     ROLE_PESQUISAR_PRODUTO,
@@ -24,7 +25,10 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
 import SecurityIcon from "@material-ui/icons/Security";
-import SettingsIcon from "@material-ui/icons/Settings";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+
+import ViewStock from "../../Stock";
 
 import ViewProductInput from "../../ProductInput";
 import CreateProductInput from "../../ProductInput/CreateProductInput";
@@ -46,6 +50,7 @@ import CreateEditRole from "../../Role/CreateEditRole";
 
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
+export const inventoryStockActual: string = "/inventario/estoque-atual";
 export const inventoryProductInput: string = "/inventario/entradas";
 export const inventoryProductInputC: string = "/inventario/c-entradas";
 
@@ -67,6 +72,7 @@ export const inventoryRoleCe: string = "/inventario/ce-permissoes";
 
 // ---------- TÍTULOS ----------
 const titleHome: string = "Início";
+const titleStockActual: string = "Estoque Atual";
 const titleProductInput: string = "Entradas";
 const titleProductOutput: string = "Saídas";
 // cadastrados
@@ -74,10 +80,10 @@ const titleRegistration: string = "Cadastros";
 const titleMeasurementUnit: string = "Unidades";
 const titleBrand: string = "Marcas";
 const titleProduct: string = "Produtos";
-const titleRole: string = "Permissões";
 
 // configurações
-const titleConfiguration: string = "Configurações";
+const titleAccess: string = "Acesso";
+const titleRole: string = "Permissões";
 
 export interface ILink {
     name: string;
@@ -111,11 +117,19 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         component: () => <div>Home</div>
     });
 
+    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE)) {
+        routesSidebar.push({
+            path: inventoryStockActual,
+            exact: true,
+            component: () => <ViewStock title={titleStockActual} />
+        });
+    }
+
     if (permissions.includes(ROLE_PESQUISAR_ENTRADA_PRODUTO)) {
         routesSidebar.push({
             path: inventoryProductInput,
             exact: true,
-            component: () => <ViewProductInput title="Entradas" />
+            component: () => <ViewProductInput title={titleProductInput} />
         });
     }
 
@@ -131,7 +145,7 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         routesSidebar.push({
             path: inventoryProductOutput,
             exact: true,
-            component: () => <ViewProductOutput title="Saídas" />
+            component: () => <ViewProductOutput title={titleProductOutput} />
         });
     }
 
@@ -147,7 +161,7 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         routesSidebar.push({
             path: inventoryBrand,
             exact: true,
-            component: () => <ViewBrand title="Marcas" />
+            component: () => <ViewBrand title={titleBrand} />
         });
     }
 
@@ -171,7 +185,7 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         routesSidebar.push({
             path: inventoryMeasurementUnit,
             exact: true,
-            component: () => <ViewMeasurementUnit title="Unidades de medidas" />
+            component: () => <ViewMeasurementUnit title={titleMeasurementUnit} />
         });
     }
 
@@ -195,7 +209,7 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         routesSidebar.push({
             path: inventoryProduct,
             exact: true,
-            component: () => <ViewProduct title="Produtos" />
+            component: () => <ViewProduct title={titleProduct} />
         });
     }
 
@@ -219,7 +233,7 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         routesSidebar.push({
             path: inventoryRole,
             exact: true,
-            component: () => <ViewRole title="Permissões" />
+            component: () => <ViewRole title={titleRole} />
         });
     }
 
@@ -260,6 +274,18 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
         ]
     });
 
+    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE)) {
+        linksSidebar.push({
+            sidebar: [
+                {
+                    name: titleStockActual,
+                    to: inventoryStockActual,
+                    icon: () => <ShoppingCartIcon />
+                }
+            ]
+        });
+    }
+
     if(permissions.includes(ROLE_PESQUISAR_ENTRADA_PRODUTO)) {
         linksSidebar.push({
             sidebar: [
@@ -288,10 +314,18 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
 
         let sidebar: ILink[] = [];
 
+        if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+            sidebar.push({
+                name: titleRole,
+                to: inventoryRole,
+                icon: () => <SecurityIcon />
+            });
+        }
+
         linksSidebar.push({
             collapse: {
-                name: titleConfiguration,
-                icon: () => <SettingsIcon />,
+                name: titleAccess,
+                icon: () => <SupervisorAccountIcon />,
             },
             sidebar: sidebar
         });        
@@ -299,8 +333,7 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
 
     if(permissions.includes(ROLE_PESQUISAR_UNIDADE_MEDIDA) ||
        permissions.includes(ROLE_PESQUISAR_MARCA) || 
-       permissions.includes(ROLE_PESQUISAR_PRODUTO) ||
-       permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+       permissions.includes(ROLE_PESQUISAR_PRODUTO)) {
 
         let sidebar: ILink[] = [];
 
@@ -325,14 +358,6 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
                 name: titleProduct,
                 to: inventoryProduct,
                 icon: () => <DevicesOtherIcon />
-            });
-        }
-
-        if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
-            sidebar.push({
-                name: titleRole,
-                to: inventoryRole,
-                icon: () => <SecurityIcon />
             });
         }
 

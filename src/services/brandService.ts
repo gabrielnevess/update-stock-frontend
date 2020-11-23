@@ -58,7 +58,7 @@ export const deleteBrand = async(id: number): Promise<any> => {
         if (error?.response?.data?.message) {
             toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
         } else {
-            toast.error("Erro ao buscar a marca!");
+            toast.error("Erro ao deletar a marca!");
         }
     }
 }

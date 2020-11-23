@@ -58,7 +58,7 @@ export const deleteMeasurementUnit = async(id: number): Promise<any> => {
         if (error?.response?.data?.message) {
             toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
         } else {
-            toast.error("Erro ao buscar a unidade de medida!");
+            toast.error("Erro ao deletar a unidade de medida!");
         }
     }
 }
