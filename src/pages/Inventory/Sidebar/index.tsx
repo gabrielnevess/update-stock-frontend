@@ -16,8 +16,7 @@ import {
 	ListItemIcon,
 	Container,
 	List,
-	Collapse,
-	Grid
+	Collapse
 } from "@material-ui/core";
 import { 
 	ICollapse,

@@ -8,6 +8,7 @@ import {
     ROLE_CADASTRAR_SAIDA_PRODUTO,
     ROLE_CADASTRAR_UNIDADE_MEDIDA,
     ROLE_CADASTRAR_USUARIO,
+    ROLE_CADASTRAR_USUARIO_PERMISSAO,
     ROLE_PESQUISAR_ENTRADA_PRODUTO,
     ROLE_PESQUISAR_ESTOQUE,
     ROLE_PESQUISAR_MARCA,
@@ -15,7 +16,8 @@ import {
     ROLE_PESQUISAR_PRODUTO,
     ROLE_PESQUISAR_SAIDA_PRODUTO,
     ROLE_PESQUISAR_UNIDADE_MEDIDA,
-    ROLE_PESQUISAR_USUARIO
+    ROLE_PESQUISAR_USUARIO,
+    ROLE_PESQUISAR_USUARIO_PERMISSAO
 } from "./permissions";
 
 import NotFound from "../../../../components/NotFound";
@@ -30,6 +32,7 @@ import SecurityIcon from "@material-ui/icons/Security";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PersonIcon from "@material-ui/icons/Person";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 import ViewStock from "../../Stock";
 
@@ -54,6 +57,9 @@ import CreateEditRole from "../../Role/CreateEditRole";
 import ViewUser from "../../User";
 import CreateEditUser from "../../User/CreateEditUser";
 
+import ViewUserRole from "../../UserRole";
+import CreateEditUserRole from "../../UserRole/CreateEditUserRoles";
+
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
 //estoque
@@ -76,9 +82,12 @@ export const inventoryProductCe: string = "/inventario/ce-produtos";
 //permissões
 export const inventoryRole: string = "/inventario/permissoes";
 export const inventoryRoleCe: string = "/inventario/ce-permissoes";
-//produtos
+//usuários
 export const inventoryUser: string = "/inventario/usuarios";
 export const inventoryUserCe: string = "/inventario/ce-usuarios";
+// usuário / permissões
+export const inventoryUserRole: string = "/inventario/usuarios-permissoes";
+export const inventoryUserRoleCe: string = "/inventario/ce-usuarios-permissoes"; 
 
 // ---------- TÍTULOS ----------
 const titleHome: string = "Início";
@@ -93,6 +102,7 @@ const titleProduct: string = "Produtos";
 
 // configurações
 const titleAccess: string = "Acesso";
+const titleUserRole: string = "Usuários/Permissões";
 const titleUser: string = "Usuários"
 const titleRole: string = "Permissões";
 
@@ -168,7 +178,8 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
     }
 
     if(permissions.includes(ROLE_PESQUISAR_PERMISSAO) ||
-       permissions.includes(ROLE_PESQUISAR_USUARIO)) {
+       permissions.includes(ROLE_PESQUISAR_USUARIO) ||
+       permissions.includes(ROLE_PESQUISAR_USUARIO_PERMISSAO)) {
 
         let sidebar: ILink[] = [];
 
@@ -186,6 +197,15 @@ export const setUpLinks = (permissions: string[]): ILinks[] => {
                 name: titleUser,
                 to: inventoryUser,
                 icon: () => <PersonIcon />
+            });
+        }
+
+        if(permissions.includes(ROLE_PESQUISAR_USUARIO) &&
+           permissions.includes(ROLE_PESQUISAR_USUARIO_PERMISSAO)) {
+            sidebar.push({
+                name: titleUserRole,
+                to: inventoryUserRole,
+                icon: () => <PersonAddIcon />
             });
         }
 
@@ -407,6 +427,24 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
             path: `${inventoryUserCe}/:id`,
             exact: true,
             component: () => <CreateEditUser />
+        });
+    }
+
+    if (permissions.includes(ROLE_PESQUISAR_USUARIO_PERMISSAO)) {
+        routesSidebar.push({
+            path: inventoryUserRole,
+            exact: true,
+            component: () => <ViewUserRole title={titleUserRole} />
+        });
+    }
+
+    if (permissions.includes(ROLE_CADASTRAR_USUARIO_PERMISSAO) &&
+        permissions.includes(ROLE_PESQUISAR_USUARIO) &&
+        permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+        routesSidebar.push({
+            path: `${inventoryUserRoleCe}/:id`,
+            exact: true,
+            component: () => <CreateEditUserRole />
         });
     }
 
