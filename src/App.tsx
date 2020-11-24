@@ -9,7 +9,7 @@ import AppProvider from './hooks';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#26a9e0"
+      main: "#2196f3"
     },
     secondary: {
       main: "#f6921e"

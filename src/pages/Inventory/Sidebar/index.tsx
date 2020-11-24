@@ -16,7 +16,8 @@ import {
 	ListItemIcon,
 	Container,
 	List,
-	Collapse
+	Collapse,
+	Grid
 } from "@material-ui/core";
 import { 
 	ICollapse,
@@ -35,6 +36,7 @@ import PrivateRoute from "../../../routes/PrivateRoute";
 import AlertDialog from "../../../components/AlertDialog";
 import { useAuth } from "../../../hooks/auth";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import logoImage from "../../../assets/img/logo.png";
 
 const LinksSidebar = (props: { sidebar: ILink[] }) => {
 	const { sidebar } = props;
@@ -175,9 +177,14 @@ const Sidebar: React.FC = () => {
 				open={open}
 			>
 				<div className={classes.toolbarIcon}>
-					<IconButton onClick={handleDrawerOpenClose}>
-						<ChevronLeftIcon />
-					</IconButton>
+					<div className={classes.toolbarGrid}>
+						<img src={logoImage}
+							alt="logo"
+							className={classes.logo} />
+						<IconButton onClick={handleDrawerOpenClose}>
+							<ChevronLeftIcon />
+						</IconButton>
+					</div>
 				</div>
 				<Divider />
 				<React.Fragment>

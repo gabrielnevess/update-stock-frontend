@@ -7,13 +7,15 @@ import {
     ROLE_CADASTRAR_PRODUTO,
     ROLE_CADASTRAR_SAIDA_PRODUTO,
     ROLE_CADASTRAR_UNIDADE_MEDIDA,
+    ROLE_CADASTRAR_USUARIO,
     ROLE_PESQUISAR_ENTRADA_PRODUTO,
     ROLE_PESQUISAR_ESTOQUE,
     ROLE_PESQUISAR_MARCA,
     ROLE_PESQUISAR_PERMISSAO,
     ROLE_PESQUISAR_PRODUTO,
     ROLE_PESQUISAR_SAIDA_PRODUTO,
-    ROLE_PESQUISAR_UNIDADE_MEDIDA
+    ROLE_PESQUISAR_UNIDADE_MEDIDA,
+    ROLE_PESQUISAR_USUARIO
 } from "./permissions";
 
 import NotFound from "../../../../components/NotFound";
@@ -27,6 +29,7 @@ import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
 import SecurityIcon from "@material-ui/icons/Security";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import PersonIcon from "@material-ui/icons/Person";
 
 import ViewStock from "../../Stock";
 
@@ -48,15 +51,19 @@ import CreateEditProduct from "../../Product/CreateEditProduct";
 import ViewRole from "../../Role";
 import CreateEditRole from "../../Role/CreateEditRole";
 
+import ViewUser from "../../User";
+import CreateEditUser from "../../User/CreateEditUser";
+
 // ---------- PÁGINAS ----------
 export const homeInventory: string = "/inventario";
+//estoque
 export const inventoryStockActual: string = "/inventario/estoque-atual";
+//entradas
 export const inventoryProductInput: string = "/inventario/entradas";
 export const inventoryProductInputC: string = "/inventario/c-entradas";
-
+//saidas
 export const inventoryProductOutput: string = "/inventario/saidas";
 export const inventoryProductOutputC: string = "/inventario/c-saidas";
-
 //unidades
 export const inventoryMeasurementUnit: string = "/inventario/unidades";
 export const inventoryMeasurementUnitCe: string = "/inventario/ce-unidades";
@@ -66,9 +73,12 @@ export const inventoryBrandCe: string = "/inventario/ce-marcas";
 //produtos
 export const inventoryProduct: string = "/inventario/produtos";
 export const inventoryProductCe: string = "/inventario/ce-produtos";
-//produtos
+//permissões
 export const inventoryRole: string = "/inventario/permissoes";
 export const inventoryRoleCe: string = "/inventario/ce-permissoes";
+//produtos
+export const inventoryUser: string = "/inventario/usuarios";
+export const inventoryUserCe: string = "/inventario/ce-usuarios";
 
 // ---------- TÍTULOS ----------
 const titleHome: string = "Início";
@@ -83,6 +93,7 @@ const titleProduct: string = "Produtos";
 
 // configurações
 const titleAccess: string = "Acesso";
+const titleUser: string = "Usuários"
 const titleRole: string = "Permissões";
 
 export interface ILink {
@@ -105,6 +116,128 @@ export interface ICollapse {
 export interface ILinks {
     collapse?: ICollapse;
     sidebar: ILink[];
+}
+
+export const setUpLinks = (permissions: string[]): ILinks[] => {
+    let linksSidebar: ILinks[] = [];
+
+    linksSidebar.push({
+        sidebar: [
+            {
+                name: titleHome,
+                to: homeInventory,
+                icon: () => <HomeIcon />
+            }
+        ]
+    });
+
+    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE)) {
+        linksSidebar.push({
+            sidebar: [
+                {
+                    name: titleStockActual,
+                    to: inventoryStockActual,
+                    icon: () => <ShoppingCartIcon />
+                }
+            ]
+        });
+    }
+
+    if(permissions.includes(ROLE_PESQUISAR_ENTRADA_PRODUTO)) {
+        linksSidebar.push({
+            sidebar: [
+                {
+                    name: titleProductInput,
+                    to: inventoryProductInput,
+                    icon: () => <AddShoppingCartIcon />
+                }
+            ]
+        });
+    }
+
+    if(permissions.includes(ROLE_PESQUISAR_SAIDA_PRODUTO)) {
+        linksSidebar.push({
+            sidebar: [
+                {
+                    name: titleProductOutput,
+                    to: inventoryProductOutput,
+                    icon: () => <RemoveShoppingCartIcon />
+                }
+            ]
+        });
+    }
+
+    if(permissions.includes(ROLE_PESQUISAR_PERMISSAO) ||
+       permissions.includes(ROLE_PESQUISAR_USUARIO)) {
+
+        let sidebar: ILink[] = [];
+
+        if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
+            sidebar.push({
+                name: titleRole,
+                to: inventoryRole,
+                icon: () => <SecurityIcon />
+            });
+        }
+
+
+        if(permissions.includes(ROLE_PESQUISAR_USUARIO)) {
+            sidebar.push({
+                name: titleUser,
+                to: inventoryUser,
+                icon: () => <PersonIcon />
+            });
+        }
+
+        linksSidebar.push({
+            collapse: {
+                name: titleAccess,
+                icon: () => <SupervisorAccountIcon />,
+            },
+            sidebar: sidebar
+        });        
+    }
+
+    if(permissions.includes(ROLE_PESQUISAR_UNIDADE_MEDIDA) ||
+       permissions.includes(ROLE_PESQUISAR_MARCA) || 
+       permissions.includes(ROLE_PESQUISAR_PRODUTO)) {
+
+        let sidebar: ILink[] = [];
+
+        if(permissions.includes(ROLE_PESQUISAR_UNIDADE_MEDIDA)) {
+            sidebar.push({
+                name: titleMeasurementUnit,
+                to: inventoryMeasurementUnit,
+                icon: () => <AssessmentIcon />
+            });
+        }
+
+        if(permissions.includes(ROLE_PESQUISAR_MARCA)) {
+            sidebar.push( {
+                name: titleBrand,
+                to: inventoryBrand,
+                icon: () => <LocalOfferIcon />
+            });
+        }
+
+        if(permissions.includes(ROLE_PESQUISAR_PRODUTO)) {
+            sidebar.push({
+                name: titleProduct,
+                to: inventoryProduct,
+                icon: () => <DevicesOtherIcon />
+            });
+        }
+
+        linksSidebar.push({
+            collapse: {
+                name: titleRegistration,
+                icon: () => <NoteAddIcon />,
+            },
+            sidebar: sidebar
+        });        
+    }
+
+    return linksSidebar;
 }
 
 export const setUpRoutes = (permissions: string[]): IRoutes[] => {
@@ -253,6 +386,30 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
         });
     }
 
+    if (permissions.includes(ROLE_PESQUISAR_USUARIO)) {
+        routesSidebar.push({
+            path: inventoryUser,
+            exact: true,
+            component: () => <ViewUser title={titleUser} />
+        });
+    }
+
+    if (permissions.includes(ROLE_CADASTRAR_USUARIO)) {
+        routesSidebar.push({
+            path: inventoryUserCe,
+            exact: true,
+            component: () => <CreateEditUser />
+        });
+    }
+
+    if (permissions.includes(ROLE_CADASTRAR_USUARIO)) {
+        routesSidebar.push({
+            path: `${inventoryUserCe}/:id`,
+            exact: true,
+            component: () => <CreateEditUser />
+        });
+    }
+
     routesSidebar.push({
         path: "*",
         component: () => <NotFound />
@@ -260,115 +417,3 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
 
     return routesSidebar;
 };
-
-export const setUpLinks = (permissions: string[]): ILinks[] => {
-    let linksSidebar: ILinks[] = [];
-
-    linksSidebar.push({
-        sidebar: [
-            {
-                name: titleHome,
-                to: homeInventory,
-                icon: () => <HomeIcon />
-            }
-        ]
-    });
-
-    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE)) {
-        linksSidebar.push({
-            sidebar: [
-                {
-                    name: titleStockActual,
-                    to: inventoryStockActual,
-                    icon: () => <ShoppingCartIcon />
-                }
-            ]
-        });
-    }
-
-    if(permissions.includes(ROLE_PESQUISAR_ENTRADA_PRODUTO)) {
-        linksSidebar.push({
-            sidebar: [
-                {
-                    name: titleProductInput,
-                    to: inventoryProductInput,
-                    icon: () => <AddShoppingCartIcon />
-                }
-            ]
-        });
-    }
-
-    if(permissions.includes(ROLE_PESQUISAR_SAIDA_PRODUTO)) {
-        linksSidebar.push({
-            sidebar: [
-                {
-                    name: titleProductOutput,
-                    to: inventoryProductOutput,
-                    icon: () => <RemoveShoppingCartIcon />
-                }
-            ]
-        });
-    }
-
-    if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
-
-        let sidebar: ILink[] = [];
-
-        if(permissions.includes(ROLE_PESQUISAR_PERMISSAO)) {
-            sidebar.push({
-                name: titleRole,
-                to: inventoryRole,
-                icon: () => <SecurityIcon />
-            });
-        }
-
-        linksSidebar.push({
-            collapse: {
-                name: titleAccess,
-                icon: () => <SupervisorAccountIcon />,
-            },
-            sidebar: sidebar
-        });        
-    }
-
-    if(permissions.includes(ROLE_PESQUISAR_UNIDADE_MEDIDA) ||
-       permissions.includes(ROLE_PESQUISAR_MARCA) || 
-       permissions.includes(ROLE_PESQUISAR_PRODUTO)) {
-
-        let sidebar: ILink[] = [];
-
-        if(permissions.includes(ROLE_PESQUISAR_UNIDADE_MEDIDA)) {
-            sidebar.push({
-                name: titleMeasurementUnit,
-                to: inventoryMeasurementUnit,
-                icon: () => <AssessmentIcon />
-            });
-        }
-
-        if(permissions.includes(ROLE_PESQUISAR_MARCA)) {
-            sidebar.push( {
-                name: titleBrand,
-                to: inventoryBrand,
-                icon: () => <LocalOfferIcon />
-            });
-        }
-
-        if(permissions.includes(ROLE_PESQUISAR_PRODUTO)) {
-            sidebar.push({
-                name: titleProduct,
-                to: inventoryProduct,
-                icon: () => <DevicesOtherIcon />
-            });
-        }
-
-        linksSidebar.push({
-            collapse: {
-                name: titleRegistration,
-                icon: () => <NoteAddIcon />,
-            },
-            sidebar: sidebar
-        });        
-    }
-
-    return linksSidebar;
-}

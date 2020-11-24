@@ -152,7 +152,7 @@ const PasswordReset: React.FC = () => {
 
                                     <Grid container spacing={2}>
 
-                                        <Grid item xs={12} sm={12}>
+                                        <Grid item>
                                             <Typography color="error" variant="subtitle2">
                                                 * Campo(s) obrigatório(s)
 										</Typography>

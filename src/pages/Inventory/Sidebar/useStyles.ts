@@ -2,6 +2,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
+  logo: {
+    width: `calc(100% - ${110}px)`,
+    height: 48
+  },
   root: {
     display: "flex",
   },
@@ -83,6 +87,12 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerClosed: {
     justifyContent: "flex-end"
+  },
+  toolbarGrid: {
+    height: 48,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around"
   }
 }));
 
