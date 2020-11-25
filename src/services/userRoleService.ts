@@ -1,6 +1,23 @@
 import { toast } from "react-toastify";
 import api from "./api";
 
+export const saveTransferList = async<T>(object: T) => {
+    try {
+        const { data } = await api.post(`/userRole`, JSON.stringify(object), {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        return data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
+        } else {
+            toast.error("Erro ao salvar as permissões!");
+        }
+    }
+}
+
 export const getUserRolesUsers = async (page?: number, size?: number): Promise<any> => {
     try {
 
@@ -47,26 +64,9 @@ export const getUserRoles = async (page?: number, size?: number): Promise<any> =
     }
 }
 
-export const getRolesByUserId = async(id: number): Promise<any> => {
+export const getTransferList = async(id: number): Promise<any> => {
     try {
-        const { data } = await api.get(`/userRole/findRolesByUserId/${id}`, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        return data;
-    } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
-        } else {
-            toast.error("Erro ao buscar o permissões do usuário!");
-        }
-    }
-}
-
-export const getRoles = async (): Promise<any> => {
-    try {
-        const { data } = await api.get("/userRole/roles", {
+        const { data } = await api.get(`/userRole/findTransferList/${id}`, {
             headers: {
                 "Content-Type": "application/json"
             }
