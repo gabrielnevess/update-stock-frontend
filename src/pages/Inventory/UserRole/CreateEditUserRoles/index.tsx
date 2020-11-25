@@ -169,7 +169,7 @@ const CreateEditUserRole: React.FC = () => {
                                     variant="h5"
                                     align="center"
                                 >
-                                    Cadastrar/Atualizar permissões do usuário
+                                    Cadastro de permissões do usuário
                                 </Typography>
                             </Box>
 
