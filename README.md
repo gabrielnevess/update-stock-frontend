@@ -3,9 +3,9 @@
 ### Sistema de Gerenciamento de Estoque para setor de tecnologia
 
 # Ferramentas Utilizadas
- ### Material-UI - https://material-ui.com/
- ### Create React App - https://create-react-app.dev/
- ### Typescript - https://www.typescriptlang.org/
+ * Material-UI - https://material-ui.com/
+ * Create React App - https://create-react-app.dev/
+ * Typescript - https://www.typescriptlang.org/
 
 ### Licença MIT
  
