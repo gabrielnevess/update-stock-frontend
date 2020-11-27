@@ -97,6 +97,7 @@ const ViewProductInput: React.FC<IViewProductInput> = (props) => {
 										<TableCell align="left">Código</TableCell>
                                         <TableCell align="left">Produto</TableCell>
                                         <TableCell align="left">Qtd. entrada de produtos</TableCell>
+										<TableCell align="left">Responsável</TableCell>
 										<TableCell align="left">Data da entrada</TableCell>
 									</TableRow>
 								</TableHead>
@@ -107,11 +108,12 @@ const ViewProductInput: React.FC<IViewProductInput> = (props) => {
 												<TableCell align="left">{row.id}</TableCell>
                                                 <TableCell align="left">{row?.product?.name} - {row?.product?.model}</TableCell>
                                                 <TableCell align="left">{row.qtd}</TableCell>
+												<TableCell align="left">{row.user?.name}</TableCell>
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 											</TableRow>
 										)) :
 										<TableRow>
-											<TableCell align="center" colSpan={4}>
+											<TableCell align="center" colSpan={5}>
 												<Typography variant="subtitle1">Nenhum Registro encontrado!</Typography>
 											</TableCell>
 										</TableRow>
