@@ -148,10 +148,10 @@ const CreateEditProductInput: React.FC = () => {
 
                                     <Grid container spacing={2}>
 
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography color="error" variant="subtitle2">
                                                 * Campo(s) obrigatório(s)
-													</Typography>
+											</Typography>
                                         </Grid>
 
                                         <Grid item xs={12}>
