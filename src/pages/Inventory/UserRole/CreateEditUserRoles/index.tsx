@@ -134,7 +134,7 @@ const CreateEditUserRole: React.FC = () => {
                 left: left,
                 right: right
             }
-            const data = await saveTransferList(object);
+            const data = await saveTransferList(object, parseInt(id));
             setSubmitLoading(false);
             if(data) {
                 toast.success("Alteração feita com sucesso!");

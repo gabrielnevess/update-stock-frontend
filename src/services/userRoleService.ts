@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 import api from "./api";
 
-export const saveTransferList = async<T>(object: T) => {
+export const saveTransferList = async<T>(object: T, userId: number) => {
     try {
-        const { data } = await api.post(`/userRole`, JSON.stringify(object), {
+        const { data } = await api.post(`/userRole/${userId}`, JSON.stringify(object), {
             headers: {
                 "Content-Type": "application/json"
             }
