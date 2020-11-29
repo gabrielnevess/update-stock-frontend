@@ -21,7 +21,7 @@ import {
 } from "./permissions";
 
 import NotFound from "../../../../components/NotFound";
-import HomeIcon from "@material-ui/icons/Home";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import NoteAddIcon from "@material-ui/icons/NoteAdd";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import AssessmentIcon from "@material-ui/icons/Assessment";
@@ -30,11 +30,8 @@ import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
 import SecurityIcon from "@material-ui/icons/Security";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PersonIcon from "@material-ui/icons/Person";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-
-import ViewStock from "../../Stock";
 
 import ViewProductInput from "../../ProductInput";
 import CreateProductInput from "../../ProductInput/CreateProductInput";
@@ -60,8 +57,10 @@ import CreateEditUser from "../../User/CreateEditUser";
 import ViewUserRole from "../../UserRole";
 import CreateEditUserRole from "../../UserRole/CreateEditUserRoles";
 
+import Dashboard from "../../Dashboard";
+
 // ---------- PÁGINAS ----------
-export const homeInventory: string = "/inventario";
+export const inventoryDashboard: string = "/inventario";
 //estoque
 export const inventoryStockActual: string = "/inventario/estoque-atual";
 //entradas
@@ -90,21 +89,20 @@ export const inventoryUserRole: string = "/inventario/usuarios-permissoes";
 export const inventoryUserRoleCe: string = "/inventario/ce-usuarios-permissoes"; 
 
 // ---------- TÍTULOS ----------
-const titleHome: string = "Início";
-const titleStockActual: string = "Estoque Atual";
-const titleProductInput: string = "Entradas";
-const titleProductOutput: string = "Saídas";
+export const titleDashboard: string = "Dashboard";
+export const titleProductInput: string = "Entradas";
+export const titleProductOutput: string = "Saídas";
 // cadastrados
-const titleRegistration: string = "Cadastros";
-const titleMeasurementUnit: string = "Unidades";
-const titleBrand: string = "Marcas";
-const titleProduct: string = "Produtos";
+export const titleRegistration: string = "Cadastros";
+export const titleMeasurementUnit: string = "Unidades de Medidas";
+export const titleBrand: string = "Marcas";
+export const titleProduct: string = "Produtos";
 
 // configurações
-const titleAccess: string = "Acesso";
-const titleUserRole: string = "Usuários/Permissões";
-const titleUser: string = "Usuários"
-const titleRole: string = "Permissões";
+export const titleAccess: string = "Acesso";
+export const titleUserRole: string = "Usuários/Permissões";
+export const titleUser: string = "Usuários"
+export const titleRole: string = "Permissões";
 
 export interface ILink {
     name: string;
@@ -131,23 +129,15 @@ export interface ILinks {
 export const setUpLinks = (permissions: string[]): ILinks[] => {
     let linksSidebar: ILinks[] = [];
 
-    linksSidebar.push({
-        sidebar: [
-            {
-                name: titleHome,
-                to: homeInventory,
-                icon: () => <HomeIcon />
-            }
-        ]
-    });
-
-    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE)) {
+    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE) && 
+       permissions.includes(ROLE_PESQUISAR_ENTRADA_PRODUTO) &&
+       permissions.includes(ROLE_PESQUISAR_SAIDA_PRODUTO)) {
         linksSidebar.push({
             sidebar: [
                 {
-                    name: titleStockActual,
-                    to: inventoryStockActual,
-                    icon: () => <ShoppingCartIcon />
+                    name: titleDashboard,
+                    to: inventoryDashboard,
+                    icon: () => <DashboardIcon />
                 }
             ]
         });
@@ -264,17 +254,13 @@ export const setUpRoutes = (permissions: string[]): IRoutes[] => {
 
     let routesSidebar: IRoutes[] = [];
 
-    routesSidebar.push({
-        path: homeInventory,
-        exact: true,
-        component: () => <div>Home</div>
-    });
-
-    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE)) {
+    if(permissions.includes(ROLE_PESQUISAR_ESTOQUE) && 
+       permissions.includes(ROLE_PESQUISAR_ENTRADA_PRODUTO) &&
+       permissions.includes(ROLE_PESQUISAR_SAIDA_PRODUTO)) {
         routesSidebar.push({
-            path: inventoryStockActual,
+            path: inventoryDashboard,
             exact: true,
-            component: () => <ViewStock title={titleStockActual} />
+            component: () => <Dashboard title={titleDashboard} />
         });
     }
 

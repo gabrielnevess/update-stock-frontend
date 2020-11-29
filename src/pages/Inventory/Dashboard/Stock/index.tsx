@@ -10,22 +10,14 @@ import {
 	CircularProgress,
 	Typography,
 	TablePagination,
-	Box,
-	//Tooltip
+	Box
 } from "@material-ui/core";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { getStocks, deleteStock } from "../../../services/stockService";
+import { getStocks } from "../../../../services/stockService";
 import useStyles from "./useStyles";
-import { Stock } from "../../../interfaces/Stock";
-import { Pageable } from "../../../interfaces/Pageable";
-//import { useHistory } from "react-router-dom";
-// import DeleteIcon from "@material-ui/icons/Delete";
-//import { useAuth } from "../../../hooks/auth";
-// import { 
-// 	isPermissionValid, 
-// 	ROLE_REMOVER_PERMISSAO
-// } from "../Sidebar/Menu/permissions";
+import { Stock } from "../../../../interfaces/Stock";
+import { Pageable } from "../../../../interfaces/Pageable";
 
 interface IViewStock {
 	title: string;
@@ -34,8 +26,6 @@ interface IViewStock {
 const ViewStock: React.FC<IViewStock> = (props) => {
 	const { title } = props;
 	const classes = useStyles();
-	//const history = useHistory();
-	// const { logged } = useAuth();
 	const [pageable, setPageable] = useState<Pageable<Stock>>({} as Pageable<Stock>);
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -63,12 +53,6 @@ const ViewStock: React.FC<IViewStock> = (props) => {
 	const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
-	}
-
-	const handleClickDeleteStock = async (id: number) => {
-		setLoading(true);
-		await deleteStock(id);
-		getData(page, rowsPerPage);
 	}
 
 	return (
@@ -111,20 +95,6 @@ const ViewStock: React.FC<IViewStock> = (props) => {
 												<TableCell align="left">{row.qtd}</TableCell>
 												<TableCell align="left">{moment(row.createdAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
 												<TableCell align="left">{moment(row.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</TableCell>
-												{/* <TableCell align="left">
-													{
-														isPermissionValid(logged?.stocks, ROLE_REMOVER_PERMISSAO) &&
-														<Tooltip title="Deletar Permissão">
-															<IconButton
-																id={`deletar-${row?.id}`}
-																aria-label="delete"
-																className={classes.marginIcon}
-																onClick={() => handleClickDeleteStock(row?.id)}>
-																<DeleteIcon />
-															</IconButton>
-														</Tooltip>
-													}
-												</TableCell> */}
 											</TableRow>
 										)) :
 										<TableRow>
