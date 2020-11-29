@@ -32,10 +32,9 @@ import { inventoryProduct } from "../../Sidebar/Menu";
 import { getProductById, saveUpdateProduct } from "../../../../services/productService";
 import Input from "../../../../components/Input";
 import { Brand } from "../../../../interfaces/Brand";
-import { Pageable } from "../../../../interfaces/Pageable";
-import { getBrands } from "../../../../services/brandService";
+import { getBrandAll } from "../../../../services/brandService";
 import { MeasurementUnit } from "../../../../interfaces/MeasurementUnit";
-import { getMeasurementUnits } from "../../../../services/measurementUnitService";
+import { getMeasurementUnitAll } from "../../../../services/measurementUnitService";
 import { Product } from "../../../../interfaces/Product";
 
 interface RouteParams {
@@ -46,8 +45,8 @@ const CreateEditProduct: React.FC = () => {
 	const history = useHistory();
 	const classes = useStyles();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [brands, setBrands] = useState<Pageable<Brand>>({} as Pageable<Brand>);
-	const [measurementUnits, setMeasurementUnits] = useState<Pageable<MeasurementUnit>>({} as Pageable<MeasurementUnit>);
+	const [brands, setBrands] = useState<Brand[]>([] as Brand[]);
+	const [measurementUnits, setMeasurementUnits] = useState<MeasurementUnit[]>([] as MeasurementUnit[]);
 	const { id } = useParams<RouteParams>();
 
 	const validationSchema = Yup.object().shape({
@@ -123,7 +122,7 @@ const CreateEditProduct: React.FC = () => {
 	}, [id]);
 
 	const getAllBrands = async () => {
-		const data = await getBrands();
+		const data = await getBrandAll();
 		setBrands(data);
 	}
 	
@@ -132,7 +131,7 @@ const CreateEditProduct: React.FC = () => {
 	}, []);
 
 	const getAllMeasurementUnits = async () => {
-		const data = await getMeasurementUnits();
+		const data = await getMeasurementUnitAll();
 		setMeasurementUnits(data);
 	}
 	
@@ -236,7 +235,7 @@ const CreateEditProduct: React.FC = () => {
 															label="Marca *"
 														>
 															<option value={-1}>Selecione uma marca</option>
-															{brands?.content?.map((el: Brand, key: number) => (
+															{brands?.map((el: Brand, key: number) => (
 																<option key={key} value={el.id}>{el.name}</option>
 															))}
 														</Field>
@@ -266,7 +265,7 @@ const CreateEditProduct: React.FC = () => {
 															label="Unidade de medida *"
 														>
 															<option value={-1}>Selecione uma unidade de medida</option>
-															{measurementUnits?.content?.map((el: MeasurementUnit, key: number) => (
+															{measurementUnits?.map((el: MeasurementUnit, key: number) => (
 																<option key={key} value={el.id}>{el.prefix}</option>
 															))}
 														</Field>

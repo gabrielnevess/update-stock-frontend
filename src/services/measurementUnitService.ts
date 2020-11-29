@@ -46,6 +46,23 @@ export const getMeasurementUnits = async (page?: number, size?: number): Promise
     }
 }
 
+export const getMeasurementUnitAll = async (): Promise<any> => {
+    try {
+        const { data } = await api.get("/measurementUnit/all", {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        return data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
+        } else {
+            toast.error("Erro ao buscar as unidades de medidas!");
+        }
+    }
+}
+
 export const deleteMeasurementUnit = async(id: number): Promise<any> => {
     try {
         const { data } = await api.delete(`/measurementUnit/${id}`, {

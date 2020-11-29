@@ -46,6 +46,23 @@ export const getBrands = async (page?: number, size?: number): Promise<any> => {
     }
 }
 
+export const getBrandAll = async (): Promise<any> => {
+    try {
+        const { data } = await api.get("/brand/all", {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        return data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(`Ocorreu um erro: ${error?.response?.data?.message}`);
+        } else {
+            toast.error("Erro ao buscar as marcas!");
+        }
+    }
+}
+
 export const deleteBrand = async(id: number): Promise<any> => {
     try {
         const { data } = await api.delete(`/brand/${id}`, {
