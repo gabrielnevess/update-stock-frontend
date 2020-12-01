@@ -46,6 +46,8 @@ const AuthProvider: React.FC = ({ children }) => {
     });
 
     const signIn = useCallback(async (userLoginDto: UserLoginDto) => {
+        delete api.defaults.headers.authorization;
+        
         const resp: TokenDto = await login<UserLoginDto>(userLoginDto);
 
         if (resp?.token) {
